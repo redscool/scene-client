@@ -1,0 +1,17 @@
+export default {
+  ACCOUNT: 'Account',
+  CHECKOUT: 'Checkout',
+  CITIES: 'cities',
+  COMPLETE_PROFILE: 'Complete Profile',
+  EVENT: 'Event',
+  FAVOURITES: 'Favourites',
+  HOME: 'Home',
+  LOGIN: 'Login',
+  LOGIN_DETAILS: 'Login Details',
+  MY_TICKETS: 'My Tickets',
+  OTP: 'Otp',
+  PROFILE: 'Profile',
+  SEARCH: 'Search',
+  TABS: 'Tabs',
+  VENUE: 'Venue',
+};
