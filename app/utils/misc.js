@@ -1,5 +1,6 @@
 import config from '../config/config.json';
 import {DAYS, MONTHS} from '../config/constants';
+import SendIntentAndroid from 'react-native-send-intent';
 
 export const convertDateToDDMMYYYYFormat = date => {
   const dd = date.getDate();
@@ -68,4 +69,14 @@ export const getTopEventFormattedDateTime = (time, addTime = true) => {
   const suffix = getSuffix(date);
   if (!addTime) return `${date}${suffix} ${month}`;
   return `${date}${suffix} ${month} • ${convertTimeToHHMMFormat(ob)}`;
+};
+
+export const checkInstalledApp = async packageName => {
+  SendIntentAndroid.isAppInstalled(packageName).then(isInstalled => {
+    if (isInstalled) {
+      console.log(`The ${packageName} is installed`);
+    } else {
+      console.log(`The ${packageName} is not installed`);
+    }
+  });
 };

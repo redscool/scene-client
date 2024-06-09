@@ -4,23 +4,11 @@ import messaging from '@react-native-firebase/messaging';
 
 import navigationTheme from './app/navigation/navigationTheme';
 import NavigationWrapper from './app/navigation/NavigationWrapper';
-// import SharedGroupPreferences from 'react-native-shared-group-preferences';
 
 const saveTokenToStorage = token => {
   console.log(token);
 };
 
-// const check = async () => {
-//   const facebookPackageName = 'com.android.providers.calendar';
-//   try {
-//     const installed = await SharedGroupPreferences.isAppInstalledAndroid(
-//       facebookPackageName,
-//     );
-//     console.log(installed, 'Facebook is installed on this device');
-//   } catch (err) {
-//     console.log('Facebook is not installed');
-//   }
-// };
 
 export default function App() {
   // useEffect(() => {

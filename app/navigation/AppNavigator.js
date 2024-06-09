@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import Checkout from '../screens/Checkout';
@@ -18,6 +18,7 @@ import {request, requestWithAccessToken} from '../api/client';
 import Cities from '../screens/Cities';
 import Ad from '../screens/Ad';
 import {ConfigContext} from '../../context/ConfigContext';
+import Ticket from '../screens/Ticket';
 
 const Stack = createNativeStackNavigator();
 
@@ -134,6 +135,7 @@ export default AppNavigator = () => {
         <Stack.Screen name={routes.MY_TICKETS} component={MyTickets} />
         <Stack.Screen name={routes.PROFILE} component={Profile} />
         <Stack.Screen name={routes.FAVOURITES} component={Favourites} />
+        <Stack.Screen name={routes.TICKET} component={Ticket} />
       </Stack.Navigator>
     </ConfigContext.Provider>
   );
