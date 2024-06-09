@@ -1,9 +1,11 @@
-import React, {useEffect} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import React, { useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 
 import navigationTheme from './app/navigation/navigationTheme';
 import NavigationWrapper from './app/navigation/NavigationWrapper';
+import { SafeAreaView, StatusBar, View } from 'react-native';
+import colors from './app/config/colors';
 // import SharedGroupPreferences from 'react-native-shared-group-preferences';
 
 const saveTokenToStorage = token => {
@@ -22,17 +24,35 @@ const saveTokenToStorage = token => {
 //   }
 // };
 
+async function requestUserPermission() {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+  if (enabled) {
+    console.log('Authorization status:', authStatus);
+  }
+}
+
 export default function App() {
-  // useEffect(() => {
+  // const getToken = async () => {
+  //   await requestUserPermission();
   //   messaging()
   //     .getToken()
   //     .then(token => {
   //       return saveTokenToStorage(token);
+  //     }).catch(err => {
+  //       console.log(err);
   //     });
+  // }
 
+  // useEffect(() => {
+  //   getToken();
   //   return messaging().onTokenRefresh(token => {
   //     saveTokenToStorage(token);
   //   });
+  
   // }, []);
   // useEffect(() => {
   //   const unsubscribe = messaging().onMessage(async remoteMessage => {
@@ -45,8 +65,15 @@ export default function App() {
   //   check();
   // }, []);
   return (
-    <NavigationContainer theme={navigationTheme}>
-      <NavigationWrapper />
-    </NavigationContainer>
+    <>
+      <StatusBar barStyle={'light-content'} />
+      <View style={{ backgroundColor: colors.dark, flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
+          <NavigationContainer theme={navigationTheme}>
+            <NavigationWrapper />
+          </NavigationContainer>
+        </SafeAreaView>
+      </View>
+    </>
   );
 }
