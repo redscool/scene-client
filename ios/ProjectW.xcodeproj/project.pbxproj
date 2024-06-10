@@ -17,7 +17,7 @@
 		6ABE364B9F9A4F3992D509F0 /* KumbhSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2EB1D686AC6044DC9E71E5C2 /* KumbhSans-Light.ttf */; };
 		8184C151DD881D1EED1C20B7 /* Pods_ProjectW_ProjectWTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B21F9339DAC7BD59914CDD0B /* Pods_ProjectW_ProjectWTests.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		9740A1622C15BADC007395B8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9740A1612C15BADC007395B8 /* GoogleService-Info.plist */; };
+		97A8A1432C178EB7009AC0C5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 97A8A1422C178EB7009AC0C5 /* GoogleService-Info.plist */; };
 		9E08168A00F0A5F6324A3DC6 /* Pods_ProjectW.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 486B7BA4516AE4FF77B15A74 /* Pods_ProjectW.framework */; };
 		DC06F45567114CA8832ABF95 /* KumbhSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9D7F3E3BC1274D5FA0BA1412 /* KumbhSans-Bold.ttf */; };
 /* End PBXBuildFile section */
@@ -51,6 +51,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ProjectW/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-ProjectW-ProjectWTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ProjectW-ProjectWTests.release.xcconfig"; path = "Target Support Files/Pods-ProjectW-ProjectWTests/Pods-ProjectW-ProjectWTests.release.xcconfig"; sourceTree = "<group>"; };
 		9740A1612C15BADC007395B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		97A8A1422C178EB7009AC0C5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		97E7F1C82C1646FA00F7ED41 /* ProjectW.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ProjectW.entitlements; path = ProjectW/ProjectW.entitlements; sourceTree = "<group>"; };
 		9D7F3E3BC1274D5FA0BA1412 /* KumbhSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "KumbhSans-Bold.ttf"; path = "../app/assets/fonts/KumbhSans-Bold.ttf"; sourceTree = "<group>"; };
 		B208F63800AE42B39FF4E16A /* KumbhSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "KumbhSans-Regular.ttf"; path = "../app/assets/fonts/KumbhSans-Regular.ttf"; sourceTree = "<group>"; };
@@ -99,6 +100,7 @@
 		13B07FAE1A68108700A75B9A /* ProjectW */ = {
 			isa = PBXGroup;
 			children = (
+				97A8A1422C178EB7009AC0C5 /* GoogleService-Info.plist */,
 				97E7F1C82C1646FA00F7ED41 /* ProjectW.entitlements */,
 				9740A1612C15BADC007395B8 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -271,7 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				9740A1622C15BADC007395B8 /* GoogleService-Info.plist in Resources */,
+				97A8A1432C178EB7009AC0C5 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				DC06F45567114CA8832ABF95 /* KumbhSans-Bold.ttf in Resources */,
 				6ABE364B9F9A4F3992D509F0 /* KumbhSans-Light.ttf in Resources */,
@@ -641,10 +643,7 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -723,10 +722,7 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

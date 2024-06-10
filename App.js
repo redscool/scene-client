@@ -36,24 +36,23 @@ async function requestUserPermission() {
 }
 
 export default function App() {
-  // const getToken = async () => {
-  //   await requestUserPermission();
-  //   messaging()
-  //     .getToken()
-  //     .then(token => {
-  //       return saveTokenToStorage(token);
-  //     }).catch(err => {
-  //       console.log(err);
-  //     });
-  // }
+  const getToken = async () => {
+    await requestUserPermission();
+    messaging()
+      .getToken()
+      .then(token => {
+        return saveTokenToStorage(token);
+      }).catch(err => {
+        console.log(err);
+      });
+  }
 
-  // useEffect(() => {
-  //   getToken();
-  //   return messaging().onTokenRefresh(token => {
-  //     saveTokenToStorage(token);
-  //   });
-  
-  // }, []);
+  useEffect(() => {
+    getToken();
+    return messaging().onTokenRefresh(token => {
+      saveTokenToStorage(token);
+    });
+  }, []);
   // useEffect(() => {
   //   const unsubscribe = messaging().onMessage(async remoteMessage => {
   //     Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
@@ -66,7 +65,7 @@ export default function App() {
   // }, []);
   return (
     <>
-      <StatusBar barStyle={'light-content'} />
+      <StatusBar backgroundColor={colors.dark} barStyle={'light-content'} />
       <View style={{ backgroundColor: colors.dark, flex: 1 }}>
         <SafeAreaView style={{ flex: 1 }}>
           <NavigationContainer theme={navigationTheme}>
