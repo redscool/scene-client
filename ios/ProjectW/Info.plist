@@ -20,6 +20,17 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.986368488233-m8o1ikdl0bgulu9s03vp0hq3h6rbq9db</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -32,7 +43,15 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>KumbhSans-Bold.ttf</string>
+		<string>KumbhSans-Light.ttf</string>
+		<string>KumbhSans-Medium.ttf</string>
+		<string>KumbhSans-Regular.ttf</string>
+		<string>KumbhSans-SemiBold.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -47,13 +66,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>KumbhSans-Bold.ttf</string>
-		<string>KumbhSans-Light.ttf</string>
-		<string>KumbhSans-Medium.ttf</string>
-		<string>KumbhSans-Regular.ttf</string>
-		<string>KumbhSans-SemiBold.ttf</string>
-	</array>
 </dict>
 </plist>

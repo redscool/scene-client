@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Button} from 'react-native';
-import {
-  RewardedInterstitialAd,
-  RewardedAdEventType,
-  TestIds,
-} from 'react-native-google-mobile-ads';
+// import {
+//   RewardedInterstitialAd,
+//   RewardedAdEventType,
+//   TestIds,
+// } from 'react-native-google-mobile-ads';
 
 const adUnitId =
 //  __DEV__
@@ -12,39 +12,39 @@ const adUnitId =
 //   : 
   'ca-app-pub-7134879426308274/3768426755';
 
-const rewardedInterstitial = RewardedInterstitialAd.createForAdRequest(
-  adUnitId,
-  {
-    keywords: ['fashion', 'clothing'],
-  },
-);
+// const rewardedInterstitial = RewardedInterstitialAd.createForAdRequest(
+//   adUnitId,
+//   {
+//     keywords: ['fashion', 'clothing'],
+//   },
+// );
 
 export default function Ad() {
   const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => {
-    const unsubscribeLoaded = rewardedInterstitial.addAdEventListener(
-      RewardedAdEventType.LOADED,
-      () => {
-        setLoaded(true);
-      },
-    );
-    const unsubscribeEarned = rewardedInterstitial.addAdEventListener(
-      RewardedAdEventType.EARNED_REWARD,
-      reward => {
-        console.log('User earned reward of ', reward);
-      },
-    );
+  // useEffect(() => {
+  //   const unsubscribeLoaded = rewardedInterstitial.addAdEventListener(
+  //     RewardedAdEventType.LOADED,
+  //     () => {
+  //       setLoaded(true);
+  //     },
+  //   );
+  //   const unsubscribeEarned = rewardedInterstitial.addAdEventListener(
+  //     RewardedAdEventType.EARNED_REWARD,
+  //     reward => {
+  //       console.log('User earned reward of ', reward);
+  //     },
+  //   );
 
-    // Start loading the rewarded interstitial ad straight away
-    rewardedInterstitial.load();
+  //   // Start loading the rewarded interstitial ad straight away
+  //   rewardedInterstitial.load();
 
-    // Unsubscribe from events on unmount
-    return () => {
-      unsubscribeLoaded();
-      unsubscribeEarned();
-    };
-  }, []);
+  //   // Unsubscribe from events on unmount
+  //   return () => {
+  //     unsubscribeLoaded();
+  //     unsubscribeEarned();
+  //   };
+  // }, []);
 
   // No advert ready to show yet
   if (!loaded) {
@@ -55,7 +55,7 @@ export default function Ad() {
     <Button
       title="Show Rewarded Interstitial Ad"
       onPress={() => {
-        rewardedInterstitial.show();
+        // rewardedInterstitial.show();
       }}
     />
   );
