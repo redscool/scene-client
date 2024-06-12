@@ -62,7 +62,7 @@ const Event = ({route, navigation}) => {
     <>
       <View style={styles.bottomContainer}>
         <AppButton
-          onPress={() => navigate(routes.CHECKOUT)}
+          onPress={() => navigate(routes.CHECKOUT, event)}
           solid
           style={styles.registerButton}
           fontStyle={styles.registerButtonFontStyle}

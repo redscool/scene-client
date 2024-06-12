@@ -69,3 +69,7 @@ export const getTopEventFormattedDateTime = (time, addTime = true) => {
   if (!addTime) return `${date}${suffix} ${month}`;
   return `${date}${suffix} ${month} • ${convertTimeToHHMMFormat(ob)}`;
 };
+
+export const checkInstalledApp = async packageName => {
+  return false;
+};

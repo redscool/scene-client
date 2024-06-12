@@ -13,5 +13,6 @@ export default {
   PROFILE: 'Profile',
   SEARCH: 'Search',
   TABS: 'Tabs',
+  TICKET: 'Ticket',
   VENUE: 'Venue',
 };
