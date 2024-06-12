@@ -6,23 +6,10 @@ import navigationTheme from './app/navigation/navigationTheme';
 import NavigationWrapper from './app/navigation/NavigationWrapper';
 import { SafeAreaView, StatusBar, View } from 'react-native';
 import colors from './app/config/colors';
-// import SharedGroupPreferences from 'react-native-shared-group-preferences';
 
 const saveTokenToStorage = token => {
   console.log(token);
 };
-
-// const check = async () => {
-//   const facebookPackageName = 'com.android.providers.calendar';
-//   try {
-//     const installed = await SharedGroupPreferences.isAppInstalledAndroid(
-//       facebookPackageName,
-//     );
-//     console.log(installed, 'Facebook is installed on this device');
-//   } catch (err) {
-//     console.log('Facebook is not installed');
-//   }
-// };
 
 async function requestUserPermission() {
   const authStatus = await messaging().requestPermission();
@@ -53,16 +40,14 @@ export default function App() {
       saveTokenToStorage(token);
     });
   }, []);
-  // useEffect(() => {
-  //   const unsubscribe = messaging().onMessage(async remoteMessage => {
-  //     Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-  //   });
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage))
+    });
 
-  //   return unsubscribe;
-  // }, []);
-  // useEffect(() => {
-  //   check();
-  // }, []);
+    return unsubscribe;
+  }, []);
+
   return (
     <>
       <StatusBar backgroundColor={colors.dark} barStyle={'light-content'} />
