@@ -117,3 +117,10 @@ export const MONTHS = {
     code: 'Dec',
   },
 };
+
+export const TICKET_FLOWS = {
+  FREE: 'FREE',
+  PAID: 'PAID',
+  INSTALL_APPS: 'INSTALL_APPS',
+  SHOW_ADS: 'SHOW_ADS',
+};

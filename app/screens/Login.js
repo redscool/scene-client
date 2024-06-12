@@ -7,32 +7,45 @@ import colors from '../config/colors';
 import fonts from '../config/fonts';
 import ListItem from '../components/ListItem';
 import routes from '../navigation/routes';
+import {showToast} from '../components/widgets/toast';
+import useService from '../../context/ServiceContext';
+import {setItem, setSecureItem} from '../utils/storage';
+import {SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
 
 GoogleSignin.configure({
   webClientId:
     '986368488233-f3bpk3fh3264m0kpdkh191g7odr6fft8.apps.googleusercontent.com',
+  offlineAccess: true,
 });
 
-async function onGoogleButtonPress() {
-  console.log('log1');
-  // Check if your device supports Google Play
-  await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-  console.log('log2');
-
-  try {
-    const res = await GoogleSignin.signIn();
-    console.log(res);
-    const {idToken} = res;
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    return auth().signInWithCredential(googleCredential);
-  } catch (e) {
-    console.log(e);
-  }
-  return null;
-}
-
 const Login = ({navigation}) => {
+  const {request} = useService();
+
   const {navigate} = navigation;
+
+  const onGoogleButtonPress = async () => {
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+    try {
+      await GoogleSignin.signOut();
+      const res = await GoogleSignin.signIn();
+      const {serverAuthCode} = res;
+      const temp = await request('post', '/api/auth/user/googleLogin', {
+        code: serverAuthCode,
+      });
+      await setSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN, temp.accessToken);
+      await setSecureItem(SECURE_STORAGE_KEY.REFRESH_TOKEN, temp.refreshToken);
+      await setItem(STORAGE_KEY.USER_ID, temp.userId);
+      navigation.reset({
+        index: 0,
+        routes: [{name: routes.HOME}],
+      });
+      showToast('Login Successfully.');
+    } catch (e) {
+      // TODO: error handling
+      console.log(e);
+      showToast('Something went wrong.');
+    }
+  };
   const options = [
     {
       icon: 'google',

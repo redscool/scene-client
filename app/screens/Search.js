@@ -24,6 +24,8 @@ const Search = ({navigation}) => {
     }
   };
 
+  // const [tags, ]
+
   const [query, setQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
