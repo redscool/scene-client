@@ -4,26 +4,31 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import colors from '../config/colors';
 import fonts from '../config/fonts';
-import {convert_date_to_ddmmyyyy_format} from '../utils/misc';
+import {
+  convertDateToDDMMYYYYFormat,
+  convertTimeToHHMMFormat,
+} from '../utils/misc';
 
-const DateInput = ({date, label, mode = 'date', setDate, style}) => {
+const DateTimeInput = ({state, label, mode = 'date', setState, style}) => {
   const [show, setShow] = useState(false);
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setShow(false);
-    setDate(currentDate);
+    setState(currentDate);
   };
   return (
     <View style={[styles.container, style]}>
       <Text style={styles.label}>{label}</Text>
       <Pressable style={styles.input} onPress={() => setShow(true)}>
         <Text style={styles.inputText}>
-          {convert_date_to_ddmmyyyy_format(date)}
+          {mode === 'date'
+            ? convertDateToDDMMYYYYFormat(state)
+            : convertTimeToHHMMFormat(state)}
         </Text>
         {show && (
           <DateTimePicker
             testID="dateTimePicker"
-            value={date}
+            value={state}
             mode={mode}
             onChange={onChange}
           />
@@ -33,7 +38,7 @@ const DateInput = ({date, label, mode = 'date', setDate, style}) => {
   );
 };
 
-export default DateInput;
+export default DateTimeInput;
 
 const styles = StyleSheet.create({
   container: {

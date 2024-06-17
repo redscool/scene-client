@@ -31,7 +31,6 @@ const Event = ({route, navigation}) => {
     const tEvent = route.params;
     if (!tEvent._id) {
       const res = await request('get', '/api/app/event', {eventId: tEvent.id});
-      console.log(res);
       setEvent(res);
     } else setEvent(tEvent);
   };

@@ -69,7 +69,7 @@ const refreshAccessToken = async navigation => {
   try {
     const data = await httpRequest(
       'post',
-      `${SERVER}/api/auth/organiser/newAccessToken`,
+      `${SERVER}/api/auth/user/newAccessToken`,
       {
         userId,
         refreshToken,

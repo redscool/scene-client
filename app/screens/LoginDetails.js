@@ -1,14 +1,29 @@
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 
 import AppButton from '../components/AppButton';
 import colors from '../config/colors';
 import fonts from '../config/fonts';
 import Icon from '../Icons';
 import routes from '../navigation/routes';
+import useService from '../../context/ServiceContext';
+import {showToast} from '../components/widgets/toast';
 
 const LoginDetails = ({navigation}) => {
   const {navigate} = navigation;
+  const {request} = useService();
+  const [email, setEmail] = useState();
+
+  const handleContinue = async () => {
+    try {
+      await request('post', '/api/auth/user/login', {email});
+      navigate(routes.OTP, email);
+    } catch (e) {
+      // TODO: error handling
+      showToast('Something went wrong.');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Please enter your email id</Text>
@@ -20,6 +35,8 @@ const LoginDetails = ({navigation}) => {
           keyboardType="email-address"
           autoComplete="email"
           style={styles.input}
+          value={email}
+          onChangeText={text => setEmail(text)}
         />
       </View>
       <AppButton
@@ -27,7 +44,7 @@ const LoginDetails = ({navigation}) => {
         solid
         title="Continue"
         style={styles.button}
-        onPress={() => navigate(routes.OTP)}
+        onPress={handleContinue}
       />
     </View>
   );

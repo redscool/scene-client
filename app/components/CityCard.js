@@ -4,9 +4,9 @@ import React from 'react';
 import colors from '../config/colors';
 import fonts from '../config/fonts';
 
-const CityCard = ({fontStyle, image, onPress, style, title}) => {
+const CityCard = ({code, fontStyle, image, onPress, style, title}) => {
   return (
-    <Pressable onPress={onPress} style={[styles.container, style]}>
+    <Pressable onPress={() => onPress(code)} style={[styles.container, style]}>
       <Image source={{uri: image}} style={styles.image} />
       <Text style={[styles.text, fontStyle]}>{title}</Text>
     </Pressable>

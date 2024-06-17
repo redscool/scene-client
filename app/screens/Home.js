@@ -10,6 +10,9 @@ import SectionHeading from '../components/SectionHeading';
 import TopEvent from '../components/TopEventContainer';
 import routes from '../navigation/routes';
 import useService from '../../context/ServiceContext';
+import {getItem} from '../utils/storage';
+import {STORAGE_KEY} from '../config/constants';
+import {showToast} from '../components/widgets/toast';
 
 export default Home = ({navigation}) => {
   const {request} = useService();
@@ -18,10 +21,16 @@ export default Home = ({navigation}) => {
   const [topEvent, setTopEvent] = useState();
 
   const init = async () => {
-    const res = await request('get', '/api/app/appconfig', {city: 'delhi'});
-    setEvents(res.events);
-    setVenues(res.venues);
-    setTopEvent(res.events[0]);
+    try {
+      const city = await getItem(STORAGE_KEY.CITY);
+      const res = await request('get', '/api/app/appconfig', {city});
+      setEvents(res.events);
+      setVenues(res.venues);
+      setTopEvent(res.events[0]);
+    } catch (e) {
+      // TODO: error handling
+      showToast('Something went wrong');
+    }
   };
 
   useEffect(() => {

@@ -1,32 +1,85 @@
 import {StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import AppButton from '../components/AppButton';
 import DateInput from '../components/DateInput';
 import Dropdown from '../components/DropDown';
 import Input from '../components/Input';
 import VerifyImage from '../components/VerifyImage';
+import useService from '../../context/ServiceContext';
+import {showToast} from '../components/widgets/toast';
+import routes from '../navigation/routes';
+import {setItem} from '../utils/storage';
+import {STORAGE_KEY} from '../config/constants';
 
-const CompleteProfile = () => {
+const CompleteProfile = ({navigation}) => {
+  const {request, requestWithAccessToken} = useService();
+  const {navigate} = navigation;
+
+  const [name, setName] = useState('');
   const [date, setDate] = useState(new Date());
-  const [selected, setSelected] = useState(undefined);
-  const data = [
-    {label: 'Male', value: '1'},
-    {label: 'Female', value: '2'},
-  ];
+  const [selected, setSelected] = useState();
+  const [genders, setGenders] = useState([]);
+
+  const init = async () => {
+    try {
+      const res = await request('get', '/api/app/genders', {});
+      const temp = [];
+      for (const gender of res)
+        temp.push({
+          label: gender,
+        });
+      setGenders(temp);
+    } catch (e) {
+      // TODO: error handling
+      console.log(e);
+    }
+  };
+
+  const handleContinue = async () => {
+    if (!name || !selected) return;
+    // TODO: error handling
+    try {
+      // TODO: no value entered
+      const res = await requestWithAccessToken(
+        'post',
+        '/api/auth/user/updateprofile',
+        {name, gender: selected.label, dob: date},
+      );
+      await setItem(STORAGE_KEY.NAME, name);
+      await setItem(STORAGE_KEY.DOB, date.toString());
+      await setItem(STORAGE_KEY.GENDER, selected.label);
+      navigate(routes.TABS);
+    } catch (e) {
+      // TODO: error handling
+      console.log(e);
+      showToast('Something went wrong');
+    }
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+
   return (
     <View style={styles.container}>
       <VerifyImage style={styles.verifyImage} />
-      <Input label="Name" placeholder="Name" style={styles.name} />
+      <Input
+        label="Name"
+        setState={setName}
+        state={name}
+        placeholder="Name"
+        style={styles.name}
+      />
       <DateInput
-        date={date}
+        state={date}
         label="DOB"
         placeholder="DD/MM/YYYY"
-        setDate={setDate}
+        setState={setDate}
         style={styles.name}
       />
       <Dropdown
-        data={data}
+        data={genders}
         label={'Gender'}
         onSelect={setSelected}
         placeholder={'Select'}
@@ -37,6 +90,7 @@ const CompleteProfile = () => {
         solid
         style={styles.button}
         title="Confirm"
+        onPress={handleContinue}
       />
     </View>
   );

@@ -5,9 +5,14 @@ import AppButton from '../components/AppButton';
 import colors from '../config/colors';
 import ListItem from '../components/ListItem';
 import routes from '../navigation/routes';
+import {removeItem, removeSecureItem} from '../utils/storage';
+import {SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
+import useUser from '../../context/UserContext';
 
 export default Account = ({navigation}) => {
   const {navigate} = navigation;
+  const {name, setName, setDob, setGender} = useUser();
+
   const accountOptions = [
     {
       id: 1,
@@ -35,19 +40,33 @@ export default Account = ({navigation}) => {
       value: 'Log out',
       gradient: false,
       icon: 'powerOff',
-      onPress: () => console.log('clicked'),
+      onPress: () => handleLogout(),
     },
   ];
 
+  const handleLogout = async () => {
+    console.log('log');
+    await removeSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN);
+    await removeSecureItem(SECURE_STORAGE_KEY.REFRESH_TOKEN);
+    await removeItem(STORAGE_KEY.DOB);
+    await removeItem(STORAGE_KEY.NAME);
+    await removeItem(STORAGE_KEY.GENDER);
+    await removeItem(STORAGE_KEY.USER_ID);
+    setName('');
+    setDob('');
+    setGender('');
+  };
   return (
     <View style={styles.container}>
-      <AppButton
-        fontStyle={{fontSize: 16}}
-        onPress={() => navigate(routes.LOGIN)}
-        solid
-        style={{height: 30, marginLeft: 20, marginTop: 30, width: 155}}
-        title="Login"
-      />
+      {
+        <AppButton
+          fontStyle={{fontSize: 16}}
+          {...(!name && {onPress: () => navigate(routes.LOGIN)})}
+          solid
+          style={{height: 30, marginLeft: 20, marginTop: 30, width: 155}}
+          title={name ? name : 'Login'}
+        />
+      }
       <FlatList
         data={accountOptions}
         renderItem={({item, index}) => (

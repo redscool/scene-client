@@ -5,18 +5,48 @@ import React, {useState} from 'react';
 import AppButton from '../components/AppButton';
 import colors from '../config/colors';
 import SearchItemCard from '../components/SearchItemCard';
-import {filters, search_result_type, tags} from '../config/constants';
+import {
+  STORAGE_KEY,
+  filters,
+  search_result_type,
+  tags,
+} from '../config/constants';
 import SearchBar from '../components/SearchBar';
 import routes from '../navigation/routes';
 import fonts from '../config/fonts';
 import Filters from '../components/Filters';
+import useService from '../../context/ServiceContext';
+import useConfig from '../../context/ConfigContext';
+import {getItem} from '../utils/storage';
 
 const Search = ({navigation}) => {
   const {navigate} = navigation;
+  const {request} = useService();
+  const {timeTags} = useConfig();
 
   const handleSearch = async () => {
+    const tags = [],
+      time = [];
+    const timeTagsArray = [];
+    for (const tag of Object.values(timeTags)) timeTagsArray.push(tag.code);
+    for (const tag of allTags) {
+      if (tag in timeTags) time.push(tag);
+      else tags.push(tag);
+    }
+    const cityKey = await getItem(STORAGE_KEY.CITY);
     try {
-      const temp = await request('post', '/api/app/search/', {cityKey, query});
+      const labels = {};
+      if (tags || time) {
+        labels['index'] = category ? 'event' : 'venue';
+        labels['tags'] = tags;
+        labels['time'] = time;
+      }
+      const temp = await request('post', '/api/app/search/', {
+        cityKey,
+        query,
+        labels,
+      });
+      console.log(temp);
       setSearchResults(temp);
     } catch (e) {
       // TODO: error handling
@@ -24,7 +54,8 @@ const Search = ({navigation}) => {
     }
   };
 
-  // const [tags, ]
+  const [allTags, setAllTags] = useState([]);
+  const [category, setCategory] = useState(true);
 
   const [query, setQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
@@ -46,7 +77,13 @@ const Search = ({navigation}) => {
           query={query}
           setQuery={setQuery}
         />
-        {showFilters && <Filters tags={[]} />}
+        {showFilters && (
+          <Filters
+            category={category}
+            setCategory={setCategory}
+            setTags={setAllTags}
+          />
+        )}
       </View>
       <FlatList
         data={searchResults}

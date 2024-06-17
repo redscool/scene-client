@@ -10,7 +10,7 @@ const TagCard = ({fontStyle, style, tag}) => {
   return (
     <View
       style={[{backgroundColor: tagsMap[tag]?.color}, styles.container, style]}>
-      <Text style={[styles.text, fontStyle]}>{tagsMap[tag].title}</Text>
+      <Text style={[styles.text, fontStyle]}>{tagsMap[tag]?.title}</Text>
     </View>
   );
 };

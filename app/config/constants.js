@@ -29,6 +29,9 @@ export const STORAGE_KEY = {
   EMAIL: 'EMAIL',
   FCM_TOKEN: 'FCM_TOKEN',
   CITY: 'CITY',
+  NAME: 'NAME',
+  DOB: 'DOB',
+  GENDER: 'GENDER',
 };
 
 export const SECURE_STORAGE_KEY = {

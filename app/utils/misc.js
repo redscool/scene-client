@@ -2,6 +2,7 @@ import config from '../config/config.json';
 import {DAYS, MONTHS} from '../config/constants';
 
 export const convertDateToDDMMYYYYFormat = date => {
+  if (!date) return;
   const dd = date.getDate();
   const mm = date.getMonth() + 1;
   const yyyy = date.getFullYear();
@@ -25,6 +26,7 @@ export const getFileUrl = file => {
 };
 
 export const getEventCardDateFormat = time => {
+  if (!time) return;
   const obj = new Date(time);
   const mon = MONTHS[obj.getMonth()].code;
   const date = obj.getDate();
