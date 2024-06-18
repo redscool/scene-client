@@ -1,19 +1,12 @@
 import {FlatList, ScrollView, StyleSheet, View} from 'react-native';
 import LocationBar from '../components/LocationBar';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
-import AppButton from '../components/AppButton';
 import colors from '../config/colors';
 import SearchItemCard from '../components/SearchItemCard';
-import {
-  STORAGE_KEY,
-  filters,
-  search_result_type,
-  tags,
-} from '../config/constants';
+import {STORAGE_KEY, filters, search_result_type} from '../config/constants';
 import SearchBar from '../components/SearchBar';
 import routes from '../navigation/routes';
-import fonts from '../config/fonts';
 import Filters from '../components/Filters';
 import useService from '../../context/ServiceContext';
 import useConfig from '../../context/ConfigContext';
@@ -46,7 +39,6 @@ const Search = ({navigation}) => {
         query,
         labels,
       });
-      console.log(temp);
       setSearchResults(temp);
     } catch (e) {
       // TODO: error handling
@@ -62,6 +54,10 @@ const Search = ({navigation}) => {
 
   const [searchResults, setSearchResults] = useState();
 
+  useEffect(() => {
+    handleSearch();
+    console.log(allTags);
+  }, [query, allTags, category]);
   return (
     <ScrollView
       alwaysBounceVertical={false}
