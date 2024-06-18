@@ -1,21 +1,3 @@
-export const tags = {
-  CULTURAL_FEST: 'Cultural fest',
-  TECH_FEST: 'Tech fest',
-  THIS_WEEK: 'This week',
-  TODAY: 'Today',
-  TOP_RATED: 'Top rated',
-  VENUE: 'Venue',
-};
-
-export const filters = [
-  tags.CULTURAL_FEST,
-  tags.TECH_FEST,
-  tags.THIS_WEEK,
-  tags.TODAY,
-  tags.TOP_RATED,
-  tags.VENUE,
-];
-
 export const search_result_type = {
   EVENT: 'event',
   VENUE: 'venue',
@@ -29,6 +11,9 @@ export const STORAGE_KEY = {
   EMAIL: 'EMAIL',
   FCM_TOKEN: 'FCM_TOKEN',
   CITY: 'CITY',
+  NAME: 'NAME',
+  DOB: 'DOB',
+  GENDER: 'GENDER',
 };
 
 export const SECURE_STORAGE_KEY = {

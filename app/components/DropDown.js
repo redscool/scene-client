@@ -1,14 +1,29 @@
-import React, {useRef, useState} from 'react';
-import {FlatList, StyleSheet, Text, Pressable, Modal, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  Pressable,
+  Modal,
+  View,
+  ScrollView,
+} from 'react-native';
 
 import colors from '../config/colors';
 import fonts from '../config/fonts';
 import Icon from '../Icons';
 
-const Dropdown = ({data, label, onSelect, placeholder, style}) => {
+const Dropdown = ({
+  data,
+  initialSelected,
+  label,
+  onSelect,
+  placeholder,
+  style,
+}) => {
   const DropdownButton = useRef();
   const [visible, setVisible] = useState(false);
-  const [selected, setSelected] = useState(undefined);
+  const [selected, setSelected] = useState();
   const [dropdownTop, setDropdownTop] = useState(0);
 
   const toggle = () => {
@@ -40,17 +55,22 @@ const Dropdown = ({data, label, onSelect, placeholder, style}) => {
     return (
       <Modal visible={visible} transparent animationType="none">
         <Pressable style={styles.overlay} onPress={() => setVisible(false)}>
-          <View style={[styles.dropdown, {top: dropdownTop}]}>
+          <ScrollView style={[styles.dropdown, {top: dropdownTop}]}>
             <FlatList
+              scrollEnabled={false}
               data={data}
               renderItem={Item}
               keyExtractor={(item, index) => index.toString()}
             />
-          </View>
+          </ScrollView>
         </Pressable>
       </Modal>
     );
   };
+
+  useEffect(() => {
+    setSelected(initialSelected);
+  }, [initialSelected]);
 
   return (
     <View style={[styles.container, style]}>
@@ -87,6 +107,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     position: 'absolute',
     width: '80%',
+    maxHeight: 140,
   },
   icon: {
     marginRight: 10,
@@ -107,9 +128,11 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   item: {
-    height: 28,
+    minHeight: 28,
     justifyContent: 'center',
     paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.placeholder
   },
   itemLabel: {
     color: colors.medium,

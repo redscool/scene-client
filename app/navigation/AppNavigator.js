@@ -19,6 +19,9 @@ import Cities from '../screens/Cities';
 import Ad from '../screens/Ad';
 import {ConfigContext} from '../../context/ConfigContext';
 import Ticket from '../screens/Ticket';
+import {getItem} from '../utils/storage';
+import {STORAGE_KEY} from '../config/constants';
+import {UserContext} from '../../context/UserContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +46,17 @@ const getConfigObject = (
   };
 };
 
+const getUserObject = (name, setName, dob, setDob, gender, setGender) => {
+  return {
+    name,
+    setName,
+    dob,
+    setDob,
+    gender,
+    setGender,
+  };
+};
+
 export default AppNavigator = () => {
   const {request} = useService();
 
@@ -51,7 +65,12 @@ export default AppNavigator = () => {
   const [timeTags, setTimeTags] = useState({});
   const [specialEventTags, setSpecialEventTags] = useState({});
 
+  const [name, setName] = useState();
+  const [dob, setDob] = useState();
+  const [gender, setGender] = useState();
+
   const [cities, setCities] = useState({});
+  const [city, setCity] = useState();
   const [types, setTypes] = useState({});
 
   const setMap = (data, setData) => {
@@ -83,10 +102,24 @@ export default AppNavigator = () => {
 
     const tTypes = await request('get', '/api/app/types', {});
     setMap(tTypes, setTypes);
+
+    const tName = await getItem(STORAGE_KEY.NAME);
+    setName(tName);
+    const tDob = await getItem(STORAGE_KEY.DOB);
+    setDob(tDob);
+    const tGender = await getItem(STORAGE_KEY.GENDER);
+    setGender(tGender);
   };
 
+  const getCity = async () => {
+    const tCity = await getItem(STORAGE_KEY.CITY);
+    console.log(tCity);
+    setCity(tCity);
+    return tCity;
+  };
   useEffect(() => {
     init();
+    getCity();
   }, []);
   return (
     <ConfigContext.Provider
@@ -98,45 +131,50 @@ export default AppNavigator = () => {
         cities,
         types,
       )}>
-      <Stack.Navigator>
-        {/* <Stack.Screen
+      <UserContext.Provider
+        value={getUserObject(name, setName, dob, setDob, gender, setGender)}>
+        <Stack.Navigator
+          {...{initialRouteName: city ? routes.TABS : routes.CITIES}}>
+          <Stack.Screen
+            name={routes.CITIES}
+            component={Cities}
+            options={{title: 'Select your City'}}
+          />
+          {/* <Stack.Screen
           options={{headerShown: false}}
           name={'ad'}
           component={Ad}
         /> */}
-        <Stack.Screen
-          options={{headerShown: false}}
-          name={routes.TABS}
-          component={HomeNavigator}
-        />
-        <Stack.Screen
-          name={routes.CITIES}
-          component={Cities}
-          options={{title: 'Select your City'}}
-        />
-        <Stack.Screen name={routes.LOGIN} component={Login} />
-        <Stack.Screen name={routes.LOGIN_DETAILS} component={LoginDetails} />
-        <Stack.Screen name={routes.OTP} component={Otp} />
-        <Stack.Screen
-          name={routes.COMPLETE_PROFILE}
-          component={CompleteProfile}
-        />
-        <Stack.Screen
-          component={Venue}
-          name={routes.VENUE}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          component={Event}
-          name={routes.EVENT}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen name={routes.CHECKOUT} component={Checkout} />
-        <Stack.Screen name={routes.MY_TICKETS} component={MyTickets} />
-        <Stack.Screen name={routes.PROFILE} component={Profile} />
-        <Stack.Screen name={routes.FAVOURITES} component={Favourites} />
-        <Stack.Screen name={routes.TICKET} component={Ticket} />
-      </Stack.Navigator>
+          <Stack.Screen
+            options={{headerShown: false}}
+            name={routes.TABS}
+            component={HomeNavigator}
+          />
+
+          <Stack.Screen name={routes.LOGIN} component={Login} />
+          <Stack.Screen name={routes.LOGIN_DETAILS} component={LoginDetails} />
+          <Stack.Screen name={routes.OTP} component={Otp} />
+          <Stack.Screen
+            name={routes.COMPLETE_PROFILE}
+            component={CompleteProfile}
+          />
+          <Stack.Screen
+            component={Venue}
+            name={routes.VENUE}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            component={Event}
+            name={routes.EVENT}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen name={routes.CHECKOUT} component={Checkout} />
+          <Stack.Screen name={routes.MY_TICKETS} component={MyTickets} />
+          <Stack.Screen name={routes.PROFILE} component={Profile} />
+          <Stack.Screen name={routes.FAVOURITES} component={Favourites} />
+          <Stack.Screen name={routes.TICKET} component={Ticket} />
+        </Stack.Navigator>
+      </UserContext.Provider>
     </ConfigContext.Provider>
   );
 };

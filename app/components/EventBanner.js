@@ -1,14 +1,10 @@
-import {Image, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
 
+import ImageComponent from './ImageComponent';
+
 export default EventBanner = ({imageUrl, style}) => {
-  return (
-    <Image
-      resizeMode="contain"
-      source={{uri: imageUrl}}
-      style={[styles.image, style]}
-    />
-  );
+  return <ImageComponent imageUrl={imageUrl} style={[style, styles.image]} />;
 };
 
 const styles = StyleSheet.create({

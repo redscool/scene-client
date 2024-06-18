@@ -6,14 +6,26 @@ import colors from '../config/colors';
 import fonts from '../config/fonts';
 import {getFileUrl} from '../utils/misc';
 import {ServiceContext} from '../../context/ServiceContext';
+import {setItem} from '../utils/storage';
+import {STORAGE_KEY} from '../config/constants';
+import routes from '../navigation/routes';
 
-const Cities = () => {
+const Cities = ({navigation}) => {
   const serviceObject = useContext(ServiceContext);
   const [cities, setCities] = useState([]);
   const getCities = async () => {
     const res = await serviceObject.request('get', '/api/app/cities', {});
     setCities(res);
   };
+
+  const handleSelectCity = async city => {
+    await setItem(STORAGE_KEY.CITY, city);
+    navigation.reset({
+      index: 0,
+      routes: [{name: routes.TABS}],
+    });
+  };
+
   useEffect(() => {
     getCities();
   }, []);
@@ -21,8 +33,10 @@ const Cities = () => {
     <View style={styles.container}>
       {cities.map((city, index) => (
         <CityCard
+          code={city.code}
           image={getFileUrl(city.avatar)}
           key={`city-${index}`}
+          onPress={handleSelectCity}
           style={{marginTop: 40}}
           title={city.title}
         />

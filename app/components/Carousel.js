@@ -1,9 +1,10 @@
-import {Dimensions, FlatList, Image, StyleSheet, View} from 'react-native';
+import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import React, {useCallback, useRef, useState} from 'react';
 
 import colors from '../config/colors';
 import Icon from '../Icons';
 import {getFileUrl} from '../utils/misc';
+import ImageComponent from './ImageComponent';
 
 const {width} = Dimensions.get('window');
 const SLIDE_SIZE = width * 0.5;
@@ -15,7 +16,7 @@ const Spacer = () => {
 const Slide = data => {
   return (
     <View style={styles.slide}>
-      <Image style={styles.image} source={{uri: getFileUrl(data.data)}} />
+      <ImageComponent style={styles.image} imageUrl={getFileUrl(data.data)} />
     </View>
   );
 };
