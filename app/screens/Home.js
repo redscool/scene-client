@@ -24,7 +24,7 @@ export default Home = ({navigation}) => {
     try {
       const city = await getItem(STORAGE_KEY.CITY);
       const res = await request('get', '/api/app/appconfig', {city});
-      setEvents(res.events);
+      setEvents(res.events.slice(1));
       setVenues(res.venues);
       setTopEvent(res.events[0]);
     } catch (e) {
