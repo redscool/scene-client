@@ -29,7 +29,8 @@ const Search = ({navigation}) => {
     const cityKey = await getItem(STORAGE_KEY.CITY);
     try {
       const labels = {};
-      if (tags || time) {
+      if (tags.length || time.length) {
+        console.log(tags, time);
         labels['index'] = category ? 'event' : 'venue';
         labels['tags'] = tags;
         labels['time'] = time;
@@ -39,6 +40,7 @@ const Search = ({navigation}) => {
         query,
         labels,
       });
+      console.log(temp);
       setSearchResults(temp);
     } catch (e) {
       // TODO: error handling
@@ -84,16 +86,13 @@ const Search = ({navigation}) => {
       <FlatList
         data={searchResults}
         nestedScrollEnabled
+        keyExtractor={item => `${Math.random() * 1000} ${item.id.toString()}`}
         renderItem={({item}) => (
           <SearchItemCard
             event={item}
+            key={`${Math.random() * 1000} ${item.id.toString()}`}
             onPress={() =>
-              navigate(
-                item.type === search_result_type.EVENT
-                  ? routes.EVENT
-                  : routes.VENUE,
-                item,
-              )
+              navigate(item.time ? routes.EVENT : routes.VENUE, item)
             }
             style={{alignSelf: 'center', marginTop: 25}}
           />

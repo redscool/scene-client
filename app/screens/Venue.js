@@ -29,7 +29,7 @@ const Venue = ({route, navigation}) => {
   const [venue, setVenue] = useState();
 
   const init = async () => {
-    const venueId = route.params._id;
+    let venueId = route.params._id ? route.params._id : route.params.id;
     const res = await request('get', '/api/app/venue', {venueId});
     setVenue(res);
   };
