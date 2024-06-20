@@ -13,10 +13,8 @@ import Otp from '../screens/Otp';
 import Profile from '../screens/Profile';
 import routes from './routes';
 import Venue from '../screens/Venue';
-import useService, {ServiceContext} from '../../context/ServiceContext';
-import {request, requestWithAccessToken} from '../api/client';
+import useService from '../../context/ServiceContext';
 import Cities from '../screens/Cities';
-import Ad from '../screens/Ad';
 import {ConfigContext} from '../../context/ConfigContext';
 import Ticket from '../screens/Ticket';
 import {getItem} from '../utils/storage';
@@ -113,7 +111,6 @@ export default AppNavigator = () => {
 
   const getCity = async () => {
     const tCity = await getItem(STORAGE_KEY.CITY);
-    console.log(tCity);
     setCity(tCity);
     return tCity;
   };
@@ -133,18 +130,12 @@ export default AppNavigator = () => {
       )}>
       <UserContext.Provider
         value={getUserObject(name, setName, dob, setDob, gender, setGender)}>
-        <Stack.Navigator
-          {...{initialRouteName: city ? routes.TABS : routes.CITIES}}>
+        <Stack.Navigator>
           <Stack.Screen
             name={routes.CITIES}
             component={Cities}
             options={{title: 'Select your City'}}
           />
-          {/* <Stack.Screen
-          options={{headerShown: false}}
-          name={'ad'}
-          component={Ad}
-        /> */}
           <Stack.Screen
             options={{headerShown: false}}
             name={routes.TABS}

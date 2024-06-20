@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import useService from '../../context/ServiceContext';
 import SearchItemCard from '../components/SearchItemCard';
 import routes from '../navigation/routes';
+import {showToast} from '../components/widgets/toast';
 
 const MyTickets = ({navigation}) => {
   const {requestWithAccessToken} = useService();
@@ -12,12 +13,17 @@ const MyTickets = ({navigation}) => {
   const [tickets, setTickets] = useState();
 
   const init = async () => {
-    const res = await requestWithAccessToken(
-      'get',
-      '/api/app/event/tickets',
-      {},
-    );
-    setTickets(res);
+    try {
+      const res = await requestWithAccessToken(
+        'get',
+        '/api/app/event/tickets',
+        {},
+      );
+      setTickets(res);
+    } catch (e) {
+      // TODO: error handling
+      showToast('Something went wrong.');
+    }
   };
 
   useEffect(() => {

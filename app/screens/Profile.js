@@ -38,7 +38,6 @@ const Profile = ({navigation}) => {
     }
     setName(user.name);
     setSelected({label: user.gender});
-    console.log("dob", user.dob);
     // setName(user.dob);
   };
 
@@ -55,6 +54,9 @@ const Profile = ({navigation}) => {
       await setItem(STORAGE_KEY.NAME, name);
       await setItem(STORAGE_KEY.DOB, date.toString());
       await setItem(STORAGE_KEY.GENDER, selected.label);
+      user.setName(name);
+      user.setDob(date.toString());
+      user.setGender(selected.label);
       navigate(routes.TABS);
     } catch (e) {
       // TODO: error handling
