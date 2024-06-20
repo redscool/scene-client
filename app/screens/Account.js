@@ -1,17 +1,18 @@
 import {FlatList, StyleSheet, View} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import AppButton from '../components/AppButton';
 import colors from '../config/colors';
 import ListItem from '../components/ListItem';
 import routes from '../navigation/routes';
-import {removeItem, removeSecureItem} from '../utils/storage';
+import {getSecureItem, removeItem, removeSecureItem} from '../utils/storage';
 import {SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
 import useUser from '../../context/UserContext';
 
 export default Account = ({navigation}) => {
   const {navigate} = navigation;
   const {name, setName, setDob, setGender} = useUser();
+  const [accessToken, setAccessToken] = useState();
 
   const accountOptions = [
     {
@@ -45,26 +46,35 @@ export default Account = ({navigation}) => {
   ];
 
   const handleLogout = async () => {
-    console.log('log');
     await removeSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN);
     await removeSecureItem(SECURE_STORAGE_KEY.REFRESH_TOKEN);
     await removeItem(STORAGE_KEY.DOB);
     await removeItem(STORAGE_KEY.NAME);
     await removeItem(STORAGE_KEY.GENDER);
     await removeItem(STORAGE_KEY.USER_ID);
-    setName('');
-    setDob('');
-    setGender('');
+    setName(undefined);
+    setDob(undefined);
+    setGender(undefined);
   };
+
+  const init = async () => {
+    const res = await getSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN);
+    setAccessToken(res);
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+
   return (
     <View style={styles.container}>
       {
         <AppButton
           fontStyle={{fontSize: 16}}
-          {...(!name && {onPress: () => navigate(routes.LOGIN)})}
+          {...(!accessToken && {onPress: () => navigate(routes.LOGIN)})}
           solid
           style={{height: 30, marginLeft: 20, marginTop: 30, width: 155}}
-          title={name ? name : 'Login'}
+          title={accessToken ? (name ? name : 'User') : 'Login'}
         />
       }
       <FlatList

@@ -37,7 +37,10 @@ const CompleteProfile = ({navigation}) => {
   };
 
   const handleContinue = async () => {
-    if (!name || !selected) return;
+    if (!name || !selected) {
+      navigate(routes.TABS);
+      return;
+    }
     // TODO: error handling
     try {
       // TODO: no value entered

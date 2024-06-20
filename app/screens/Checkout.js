@@ -5,9 +5,12 @@ import fonts from '../config/fonts';
 import colors from '../config/colors';
 import AppButton from '../components/AppButton';
 import {checkInstalledApp} from '../utils/misc';
-import {TICKET_FLOWS} from '../config/constants';
+import {SECURE_STORAGE_KEY, TICKET_FLOWS} from '../config/constants';
 import useService from '../../context/ServiceContext';
 import {showToast} from '../components/widgets/toast';
+import {getSecureItem} from '../utils/storage';
+import routes from '../navigation/routes';
+import useAd from '../hooks/useAd';
 
 const TITLE_FOR_FLOW = {
   [TICKET_FLOWS.FREE]: 'Register for ',
@@ -16,8 +19,10 @@ const TITLE_FOR_FLOW = {
   [TICKET_FLOWS.SHOW_ADS]: 'Watch an ad and register for ',
 };
 
-const Checkout = ({route}) => {
+const Checkout = ({route, navigation}) => {
   const {requestWithAccessToken} = useService();
+  const {isLoading, play} = useAd();
+  const {navigate} = navigation;
 
   const event = route.params;
   const [apps, setApps] = useState([]);
@@ -43,26 +48,41 @@ const Checkout = ({route}) => {
       });
     setApps(temp);
   };
+
+  const register = async () => {
+    try {
+      await requestWithAccessToken('post', '/api/app/event/register', {
+        eventId: event._id,
+      });
+      showToast('Registered Successfully');
+    } catch (e) {
+      // TODO: error handling
+      showToast('Something Went Wrong');
+      console.log(e);
+    }
+  };
+
+  const handleRegister = async () => {
+    const accessToken = await getSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN);
+    if (!accessToken) {
+      showToast('Please login first.');
+      navigate(routes.LOGIN);
+      return;
+    }
+    if (flow === TICKET_FLOWS.FREE) {
+      register();
+    } else if (flow === TICKET_FLOWS.SHOW_ADS) {
+      if (isLoading) {
+        showToast('Something went wrong try again.');
+        return;
+      }
+      play(register);
+    }
+  };
+
   useEffect(() => {
     init();
   }, []);
-
-  const handleRegister = async () => {
-    if (flow === TICKET_FLOWS.FREE) {
-      try {
-        const res = await requestWithAccessToken(
-          'post',
-          '/api/app/event/register',
-          {eventId: event._id},
-        );
-        showToast('Registered Successfully');
-      } catch (e) {
-        // TODO: error handling
-        showToast('Something Went Wrong');
-        console.log(e);
-      }
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -93,7 +113,7 @@ const Checkout = ({route}) => {
       <AppButton
         fontStyle={{fontSize: 16}}
         onPress={handleRegister}
-        style={{width: 155, height: 30, marginTop: 'auto', marginBottom: 30}}
+        style={[styles.button, {opacity: isLoading ? 0.5 : 1}]}
         solid
         title={event.price ? 'Pay Now' : 'Register Now'}
       />
@@ -104,6 +124,12 @@ const Checkout = ({route}) => {
 export default Checkout;
 
 const styles = StyleSheet.create({
+  button: {
+    height: 30,
+    marginBottom: 30,
+    marginTop: 'auto',
+    width: 155,
+  },
   container: {
     flex: 1,
     alignItems: 'center',

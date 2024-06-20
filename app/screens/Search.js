@@ -30,7 +30,6 @@ const Search = ({navigation}) => {
     try {
       const labels = {};
       if (tags.length || time.length) {
-        console.log(tags, time);
         labels['index'] = category ? 'event' : 'venue';
         labels['tags'] = tags;
         labels['time'] = time;
@@ -40,7 +39,6 @@ const Search = ({navigation}) => {
         query,
         labels,
       });
-      console.log(temp);
       setSearchResults(temp);
     } catch (e) {
       // TODO: error handling
@@ -58,7 +56,6 @@ const Search = ({navigation}) => {
 
   useEffect(() => {
     handleSearch();
-    console.log(allTags);
   }, [query, allTags, category]);
   return (
     <ScrollView
