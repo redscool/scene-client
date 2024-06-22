@@ -18,13 +18,12 @@ export default LocationBar = () => {
         <Icon color={colors.text} name="location" size={24} />
       </View>
       <View style={styles.detailsContainer}>
-        <Text style={styles.title}>Saket, New Delhi</Text>
+        <Text style={styles.subtitle}>Showing events in </Text>
         <View style={styles.locationContainer}>
-          <Text style={styles.subtitle}>Showing events in </Text>
           <Pressable
             style={styles.highlight}
             onPress={() => navigate(routes.CITIES)}>
-            <Text style={styles.highlightText}>Delhi-NCR </Text>
+            <Text style={styles.title}>Delhi-NCR </Text>
           </Pressable>
           <Icon color={colors.primary} name="chevronDown" size={15} />
         </View>
@@ -51,11 +50,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  highlightText: {
-    color: colors.primary,
-    fontSize: 14,
-    fontFamily: fonts[500],
-  },
   icon: {
     alignItems: 'center',
     height: '100%',
@@ -72,7 +66,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts[300],
   },
   title: {
-    color: colors.text,
+    color: colors.primary,
     fontSize: 20,
     fontFamily: fonts[400],
   },

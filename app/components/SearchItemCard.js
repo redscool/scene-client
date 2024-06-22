@@ -35,9 +35,11 @@ const SearchItemCard = ({event, onPress, style}) => {
           showsVerticalScrollIndicator={false}
           style={{marginVertical: 10}}
         />
-        <View style={styles.abbreviationContainer}>
-          <Text style={styles.abbreviation}>{event.abbreviation}</Text>
-        </View>
+        {event.startTime && (
+          <View style={styles.abbreviationContainer}>
+            <Text style={styles.abbreviation}>{event.abbreviation}</Text>
+          </View>
+        )}
         {event.address && (
           <View style={styles.venueContainer}>
             <Icon color={colors.secondary} name="location" size={8} />

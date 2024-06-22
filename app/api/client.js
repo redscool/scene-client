@@ -76,7 +76,7 @@ const refreshAccessToken = async navigation => {
       },
       {},
     );
-    await setSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN, data.data.accessToken);
+    await setSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN, data.accessToken);
     return true;
   } catch (_e) {
     navigation.navigate(routes.LOGIN);
@@ -92,7 +92,7 @@ export const requestWithAccessToken =
     const config = {
       headers: {
         Authorization: token,
-        "x-citykey": 'delhi',
+        'x-citykey': 'delhi',
       },
     };
 
@@ -135,15 +135,10 @@ export const requestFileServer =
       },
     };
     try {
-      const data = await httpRequest(
-        method,
-        url,
-        body,
-        config,
-      );
+      const data = await httpRequest(method, url, body, config);
       return data;
     } catch (err) {
-      if(err?.status !== 401) {
+      if (err?.status !== 401) {
         throw err;
       }
       if (replayed) {
