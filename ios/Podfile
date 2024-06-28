@@ -30,6 +30,7 @@ target 'ProjectW' do
 
   use_frameworks! :linkage => :static
   $RNFirebaseAsStaticFramework = true
+  $RNGoogleMobileAdsAsStaticFramework = true
   use_react_native!(
     :path => config[:reactNativePath],
     # Enables Flipper.
