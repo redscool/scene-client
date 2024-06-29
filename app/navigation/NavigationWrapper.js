@@ -24,13 +24,14 @@ function NavigationWrapper() {
 
   useEffect(() => {
     const handleDeepLink = ({url}) => {
-      console.log(url);
-      const route = url.replace(/.*?:\/\//g, '');
-      const routeName = route.split('/')[0];
-
-      console.log(routeName);
-      if (routeName === routes.EVENT) {
-        navigation.navigate(routes.EVENT, {});
+      const link = url.replace(/.*?:\/\//g, '');
+      const routeName = link.split('/')[0];
+      const route = routeName.split('?')[0];
+      if (route === routes.EVENT) {
+        navigation.navigate(routes.EVENT, {id: routeName.split('=')[1]});
+      }
+      if (route === routes.VENUE) {
+        navigation.navigate(routes.VENUE, {id: routeName.split('=')[1]});
       }
     };
 

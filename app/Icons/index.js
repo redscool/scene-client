@@ -21,6 +21,7 @@ import Rupee from './Rupee';
 import Search from './Search';
 import Ticket from './Ticket';
 import Timer from './Timer';
+import Share from './Share';
 
 const map = {
   account: ({color, size, style}) => (
@@ -79,6 +80,9 @@ const map = {
   ),
   search: ({color, size, style}) => (
     <Search color={color} size={size} style={style} />
+  ),
+  share: ({color, size, style}) => (
+    <Share color={color} size={size} style={style} />
   ),
   ticket: ({color, size, style}) => (
     <Ticket color={color} size={size} style={style} />

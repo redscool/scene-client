@@ -2,6 +2,7 @@ import {
   FlatList,
   Linking,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
   View,
@@ -21,6 +22,7 @@ import useService from '../../context/ServiceContext';
 import {getFileUrl} from '../utils/misc';
 import TextButton from '../components/TextButton';
 import fonts from '../config/fonts';
+import ShareButton from '../components/ShareButton';
 
 const Venue = ({route, navigation}) => {
   const {request} = useService();
@@ -50,6 +52,17 @@ const Venue = ({route, navigation}) => {
     Linking.openURL(url);
   };
 
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `Checkout this amazing Venue at Scene App. \n\n\n https://www.sceneweb.app/projectw/venue/${venue._id}`,
+      });
+    } catch (error) {
+      // TODO: error handling
+      showToast('Something went wrong.');
+    }
+  };
+
   useEffect(() => {
     init();
   }, []);
@@ -58,11 +71,20 @@ const Venue = ({route, navigation}) => {
   return (
     <>
       <View style={styles.bottomContainer}>
-        <FavouriteButton
-          onPress={() => setState(!state)}
-          state={state}
-          style={styles.favouriteButton}
-        />
+        <View style={styles.buttonContainer}>
+          <FavouriteButton
+            onPress={() => setState(!state)}
+            state={state}
+            style={styles.favouriteButton}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <ShareButton
+            onPress={handleShare}
+            state={state}
+            style={styles.shareButton}
+          />
+        </View>
       </View>
 
       <ScrollView
@@ -126,14 +148,12 @@ export default Venue;
 const styles = StyleSheet.create({
   bottomContainer: {
     alignItems: 'center',
-    backgroundColor: colors.glass,
     bottom: 80,
     alignSelf: 'center',
-    flexDirection: 'row',
     height: 48,
-    width: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
+    width: 120,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     position: 'absolute',
     zIndex: 1,
   },
@@ -152,15 +172,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 10,
   },
-  favouriteButton: {
-    height: 35,
-  },
-  registerButton: {
-    height: 35,
-    marginLeft: 28,
-    width: '70%',
-  },
-  registerButtonFontStyle: {
-    fontSize: 16,
+  buttonContainer: {
+    alignItems: 'center',
+    backgroundColor: colors.glass,
+    height: 48,
+    width: 48,
+    borderRadius: 24,
+    justifyContent: 'center',
   },
 });

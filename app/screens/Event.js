@@ -1,4 +1,4 @@
-import {Linking, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Linking, ScrollView, Share, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 
 import AppButton from '../components/AppButton';
@@ -20,6 +20,8 @@ import routes from '../navigation/routes';
 import useService from '../../context/ServiceContext';
 import TextButton from '../components/TextButton';
 import fonts from '../config/fonts';
+import ShareButton from '../components/ShareButton';
+import {showToast} from '../components/widgets/toast';
 
 const Event = ({route, navigation}) => {
   const {request} = useService();
@@ -51,6 +53,17 @@ const Event = ({route, navigation}) => {
     Linking.openURL(url);
   };
 
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `Checkout this amazing event at Scene App. \n\n\n https://www.sceneweb.app/projectw/event/${event._id}`,
+      });
+    } catch (error) {
+      // TODO: error handling
+      showToast('Something went wrong.');
+    }
+  };
+
   useEffect(() => {
     init();
   }, []);
@@ -67,11 +80,18 @@ const Event = ({route, navigation}) => {
           fontStyle={styles.registerButtonFontStyle}
           title="Register"
         />
-        <FavouriteButton
-          onPress={() => setState(!state)}
-          state={state}
-          style={styles.favouriteButton}
-        />
+        <View style={styles.buttons}>
+          <FavouriteButton
+            onPress={() => setState(!state)}
+            state={state}
+            style={styles.button}
+          />
+          <ShareButton
+            onPress={handleShare}
+            state={state}
+            style={styles.button}
+          />
+        </View>
       </View>
       <ScrollView
         style={styles.container}
@@ -157,6 +177,16 @@ const styles = StyleSheet.create({
     width: '100%',
     zIndex: 1,
   },
+  button: {
+    height: 35,
+    width: '60%',
+  },
+  buttons: {
+    flexDirection: 'row',
+    width: '30%',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
   carousel: {
     marginVertical: 12,
   },
@@ -172,16 +202,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 10,
   },
-  favouriteButton: {
-    height: 35,
-    marginLeft: 'auto',
-    marginRight: 28,
-  },
   registerButton: {
     height: 35,
-    marginLeft: 28,
-    marginRight: 'auto',
-    width: '70%',
+    width: '60%',
   },
   registerButtonFontStyle: {
     fontSize: 16,
