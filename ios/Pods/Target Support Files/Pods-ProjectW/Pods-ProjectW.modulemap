@@ -1,6 +1,0 @@
-framework module Pods_ProjectW {
-  umbrella header "Pods-ProjectW-umbrella.h"
-
-  export *
-  module * { export * }
-}
