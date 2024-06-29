@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React, {useEffect} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 
 import navigationTheme from './app/navigation/navigationTheme';
 import NavigationWrapper from './app/navigation/NavigationWrapper';
-import { SafeAreaView, StatusBar, View } from 'react-native';
+import {SafeAreaView, StatusBar, View} from 'react-native';
 import colors from './app/config/colors';
 
 const saveTokenToStorage = token => {
@@ -29,10 +29,11 @@ export default function App() {
       .getToken()
       .then(token => {
         return saveTokenToStorage(token);
-      }).catch(err => {
+      })
+      .catch(err => {
         console.log(err);
       });
-  }
+  };
 
   useEffect(() => {
     getToken();
@@ -40,9 +41,10 @@ export default function App() {
       saveTokenToStorage(token);
     });
   }, []);
+
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage))
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
 
     return unsubscribe;
@@ -51,8 +53,8 @@ export default function App() {
   return (
     <>
       <StatusBar backgroundColor={colors.dark} barStyle={'light-content'} />
-      <View style={{ backgroundColor: colors.dark, flex: 1 }}>
-        <SafeAreaView style={{ flex: 1 }}>
+      <View style={{backgroundColor: colors.dark, flex: 1}}>
+        <SafeAreaView style={{flex: 1}}>
           <NavigationContainer theme={navigationTheme}>
             <NavigationWrapper />
           </NavigationContainer>
