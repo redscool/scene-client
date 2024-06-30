@@ -1,0 +1,25 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "app/assets/fonts/KumbhSans-Bold.ttf",
+      "sha1": "49b26d901cba6aeb8a80bd1774addc29a665a5ba"
+    },
+    {
+      "path": "app/assets/fonts/KumbhSans-Light.ttf",
+      "sha1": "dd2415031c33d4e394ed3f7ea2323c7c44a94da8"
+    },
+    {
+      "path": "app/assets/fonts/KumbhSans-Medium.ttf",
+      "sha1": "a8ef829cac90eb75d6b95d8ee1b1dd5532ef4ec9"
+    },
+    {
+      "path": "app/assets/fonts/KumbhSans-Regular.ttf",
+      "sha1": "031c083b268372ec5f2e3f9d7bdd6cf260498cf7"
+    },
+    {
+      "path": "app/assets/fonts/KumbhSans-SemiBold.ttf",
+      "sha1": "90d71e87a613e22ff261a2d53e0a3294d4c2be7a"
+    }
+  ]
+}
