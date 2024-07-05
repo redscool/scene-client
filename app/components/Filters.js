@@ -1,6 +1,6 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import useConfig from '../../context/ConfigContext';
+import useConfig from '../../context/AppConfig';
 import AppButton from './AppButton';
 import fonts from '../config/fonts';
 

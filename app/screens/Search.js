@@ -9,7 +9,7 @@ import SearchBar from '../components/SearchBar';
 import routes from '../navigation/routes';
 import Filters from '../components/Filters';
 import useService from '../../context/ServiceContext';
-import useConfig from '../../context/ConfigContext';
+import useConfig from '../../context/AppConfig';
 import {getItem} from '../utils/storage';
 
 const Search = ({navigation}) => {
@@ -39,6 +39,7 @@ const Search = ({navigation}) => {
         query,
         labels,
       });
+      console.log(temp);
       setSearchResults(temp);
     } catch (e) {
       // TODO: error handling
@@ -55,6 +56,7 @@ const Search = ({navigation}) => {
   const [searchResults, setSearchResults] = useState();
 
   useEffect(() => {
+    console.log(query);
     handleSearch();
   }, [query, allTags, category]);
   return (
