@@ -6,6 +6,7 @@ export default {
   EVENT: 'Event',
   FAVOURITES: 'Favourites',
   HOME: 'Home',
+  LANDING_PAGE: 'LandingPage',
   LOGIN: 'Login',
   LOGIN_DETAILS: 'LoginDetails',
   MY_TICKETS: 'MyTickets',

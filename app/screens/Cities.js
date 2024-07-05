@@ -31,7 +31,7 @@ const Cities = ({navigation}) => {
   }, []);
   return (
     <View style={styles.container}>
-      {cities.map((city, index) => (
+      {cities?.map((city, index) => (
         <CityCard
           code={city.code}
           image={getFileUrl(city.avatar)}
