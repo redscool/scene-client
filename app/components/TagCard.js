@@ -2,15 +2,18 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
 import fonts from '../config/fonts';
-import useConfig from '../../context/AppConfig';
+import useAppConfig from '../../context/AppConfig';
 
 const TagCard = ({fontStyle, style, tag}) => {
-  const {getAllEventTags} = useConfig();
-  const tagsMap = getAllEventTags();
+  const {allEventTags} = useAppConfig();
   return (
     <View
-      style={[{backgroundColor: tagsMap[tag]?.color}, styles.container, style]}>
-      <Text style={[styles.text, fontStyle]}>{tagsMap[tag]?.title}</Text>
+      style={[
+        {backgroundColor: allEventTags[tag]?.color},
+        styles.container,
+        style,
+      ]}>
+      <Text style={[styles.text, fontStyle]}>{allEventTags[tag]?.title}</Text>
     </View>
   );
 };

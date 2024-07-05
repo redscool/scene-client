@@ -5,6 +5,7 @@ export default {
   COMPLETE_PROFILE: 'CompleteProfile',
   EVENT: 'Event',
   FAVOURITES: 'Favourites',
+  HELP: 'Help',
   HOME: 'Home',
   LANDING_PAGE: 'LandingPage',
   LOGIN: 'Login',
