@@ -11,7 +11,7 @@ import useUser from '../../context/UserContext';
 
 export default Account = ({navigation}) => {
   const {navigate} = navigation;
-  const {name, setName, setDob, setGender} = useUser();
+  // const {name, setName, setDob, setGender} = useUser();
   const [accessToken, setAccessToken] = useState();
 
   const accountOptions = [
@@ -43,6 +43,13 @@ export default Account = ({navigation}) => {
       icon: 'powerOff',
       onPress: () => handleLogout(),
     },
+    {
+      id: 5,
+      value: 'Need Help?',
+      gradient: false,
+      icon: 'powerOff',
+      onPress: () => navigate(routes.HELP),
+    },
   ];
 
   const handleLogout = async () => {
@@ -52,9 +59,9 @@ export default Account = ({navigation}) => {
     await removeItem(STORAGE_KEY.NAME);
     await removeItem(STORAGE_KEY.GENDER);
     await removeItem(STORAGE_KEY.USER_ID);
-    setName(undefined);
-    setDob(undefined);
-    setGender(undefined);
+    // setName(undefined);
+    // setDob(undefined);
+    // setGender(undefined);
   };
 
   const init = async () => {

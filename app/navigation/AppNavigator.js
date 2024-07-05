@@ -20,6 +20,7 @@ import Cities from '../screens/Cities';
 import Ticket from '../screens/Ticket';
 import LandingPage from '../screens/LandingPage';
 import useAppConfig from '../../context/AppConfig';
+import ChatSupport from '../screens/ChatSupport';
 
 const Stack = createNativeStackNavigator();
 
@@ -102,6 +103,11 @@ export default AppNavigator = () => {
       <Stack.Screen name={routes.PROFILE} component={Profile} />
       <Stack.Screen name={routes.FAVOURITES} component={Favourites} />
       <Stack.Screen name={routes.TICKET} component={Ticket} />
+      <Stack.Screen
+        name={routes.HELP}
+        component={ChatSupport}
+        options={{title: 'Help Chat'}}
+      />
     </Stack.Navigator>
   );
 };
