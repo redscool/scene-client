@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import Account from '../screens/Account';
@@ -6,17 +6,10 @@ import Home from '../screens/Home';
 import Icon from '../Icons';
 import routes from './routes';
 import Search from '../screens/Search';
-import useAppConfig from '../context/AppConfigContext';
 
 const Tab = createBottomTabNavigator();
 
 export default HomeNavigator = () => {
-  const {getAppConfig} = useAppConfig();
-
-  useEffect(() => {
-    getAppConfig();
-  }, []);
-
   return (
     <Tab.Navigator
       screenOptions={{

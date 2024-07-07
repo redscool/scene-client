@@ -60,7 +60,7 @@ export const AppConfigProvider = ({children}) => {
     );
     setMap(tSpecialEventTags, setSpecialEventTags);
 
-    setAllEventTags({...eventTags, ...timeTags, ...specialEventTags});
+    setMap([...tEventTags, ...tSpecialEventTags, ...tTimeTags], setAllEventTags)
   };
 
   const getCities = async () => {

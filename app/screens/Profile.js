@@ -17,7 +17,6 @@ import { StackActions } from '@react-navigation/native';
 
 const Profile = ({navigation}) => {
   const {requestWithAccessToken} = useService();
-  const {navigate} = navigation;
   const {genders} = useAppConfig();
   const {
     name: userName,
@@ -37,6 +36,7 @@ const Profile = ({navigation}) => {
     if (!accessToken) {
       showToast('Please login first.');
       navigation.dispatch(StackActions.replace(routes.LOGIN));
+      return;
     }
     setName(userName);
     setSelected({label: userGender});
