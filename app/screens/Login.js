@@ -8,7 +8,7 @@ import fonts from '../config/fonts';
 import ListItem from '../components/ListItem';
 import routes from '../navigation/routes';
 import {showToast} from '../components/widgets/toast';
-import useService from '../../context/ServiceContext';
+import useService from '../context/ServiceContext';
 import {setItem, setSecureItem} from '../utils/storage';
 import {SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
 

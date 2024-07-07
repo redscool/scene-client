@@ -9,7 +9,7 @@ import routes from '../navigation/routes';
 import TextButton from '../components/TextButton';
 import Timer from '../components/Timer';
 import {showToast} from '../components/widgets/toast';
-import useService from '../../context/ServiceContext';
+import useService from '../context/ServiceContext';
 import {setItem, setSecureItem} from '../utils/storage';
 import {SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
 

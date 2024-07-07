@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import useService from '../../context/ServiceContext';
+import useService from '../context/ServiceContext';
 import SearchItemCard from '../components/SearchItemCard';
 import routes from '../navigation/routes';
 import {showToast} from '../components/widgets/toast';

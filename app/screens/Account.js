@@ -7,7 +7,7 @@ import ListItem from '../components/ListItem';
 import routes from '../navigation/routes';
 import {getSecureItem, removeItem, removeSecureItem} from '../utils/storage';
 import {SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
-import useUser from '../../context/UserContext';
+import useUser from '../context/UserContext';
 
 export default Account = ({navigation}) => {
   const {navigate} = navigation;
@@ -81,7 +81,10 @@ export default Account = ({navigation}) => {
           {...(!accessToken && {onPress: () => navigate(routes.LOGIN)})}
           solid
           style={{height: 30, marginLeft: 20, marginTop: 30, width: 155}}
-          title={accessToken ? (name ? name : 'User') : 'Login'}
+          title={
+            // accessToken ? (name ? name : 'User') :
+            'Login'
+          }
         />
       }
       <FlatList

@@ -6,12 +6,12 @@ import DateInput from '../components/DateInput';
 import Dropdown from '../components/DropDown';
 import Input from '../components/Input';
 import VerifyImage from '../components/VerifyImage';
-import useService from '../../context/ServiceContext';
+import useService from '../context/ServiceContext';
 import {showToast} from '../components/widgets/toast';
 import routes from '../navigation/routes';
 import {setItem} from '../utils/storage';
 import {STORAGE_KEY} from '../config/constants';
-import useUser from '../../context/UserContext';
+import useUser from '../context/UserContext';
 
 const Profile = ({navigation}) => {
   const {request, requestWithAccessToken} = useService();

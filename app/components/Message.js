@@ -2,15 +2,15 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import colors from '../config/colors';
 import fonts from '../config/fonts';
+import {getMessageFormattedDateTime} from '../utils/misc';
 
 const Message = ({messageObj}) => {
-  const {message, time, sender} = messageObj;
+  const {message, createdAt, isUser} = messageObj;
   return (
-    <View
-      style={[styles.container, sender === 'Support' ? styles.support : null]}>
-      {sender === 'Support' && <Text style={styles.sender}>{sender}</Text>}
+    <View style={[styles.container, !isUser ? styles.support : null]}>
+      {!isUser && <Text style={styles.sender}>{'Support'}</Text>}
       <Text style={styles.message}>{message}</Text>
-      <Text style={styles.time}>{time}</Text>
+      <Text style={styles.time}>{getMessageFormattedDateTime(createdAt)}</Text>
     </View>
   );
 };

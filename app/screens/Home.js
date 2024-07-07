@@ -1,6 +1,6 @@
 import {FlatList, ScrollView, StyleSheet, View} from 'react-native';
 import LocationBar from '../components/LocationBar';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import AppButton from '../components/AppButton';
 import CollegeCard from '../components/CollegeCard';
@@ -9,34 +9,10 @@ import EventCard from '../components/EventCard';
 import SectionHeading from '../components/SectionHeading';
 import TopEvent from '../components/TopEventContainer';
 import routes from '../navigation/routes';
-import useService from '../../context/ServiceContext';
-import {getItem} from '../utils/storage';
-import {STORAGE_KEY} from '../config/constants';
-import {showToast} from '../components/widgets/toast';
+import useAppConfig from '../context/AppConfigContext';
 
 export default Home = ({navigation}) => {
-  const {request} = useService();
-  const [events, setEvents] = useState([]);
-  const [venues, setVenues] = useState([]);
-  const [topEvent, setTopEvent] = useState();
-
-  const init = async () => {
-    try {
-      const city = await getItem(STORAGE_KEY.CITY);
-      const res = await request('get', '/api/app/appconfig', {city});
-      setEvents(res.events.slice(1));
-      setVenues(res.venues);
-      setTopEvent(res.events[0]);
-    } catch (e) {
-      // TODO: error handling
-      showToast('Something went wrong');
-    }
-  };
-
-  useEffect(() => {
-    init();
-  }, []);
-
+  const {events, venues} = useAppConfig();
   return (
     <ScrollView
       alwaysBounceVertical={false}
@@ -44,10 +20,12 @@ export default Home = ({navigation}) => {
       showsVerticalScrollIndicator={false}
       style={styles.container}>
       <LocationBar />
-      <TopEvent
-        event={topEvent}
-        onPress={() => navigation.navigate(routes.EVENT, topEvent)}
-      />
+      {events ? (
+        <TopEvent
+          event={events[0]}
+          onPress={() => navigation.navigate(routes.EVENT, events[0])}
+        />
+      ) : null}
       <SectionHeading style={{marginTop: 15}} title={'Around You'} />
       {events && (
         <FlatList

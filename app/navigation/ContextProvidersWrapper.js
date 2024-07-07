@@ -1,14 +1,17 @@
 import React from 'react';
 
 import AppNavigator from './AppNavigator';
-import {AppConfigProvider} from '../../context/AppConfig';
-import {AuthProvider} from '../../context/AuthContext';
+import {AppConfigProvider} from '../context/AppConfigContext';
+import {AuthProvider} from '../context/AuthContext';
+import {ChatProvider} from '../context/ChatContext';
 
 function ContextProvidersWrapper() {
   return (
     <AppConfigProvider>
       <AuthProvider>
-        <AppNavigator />
+        <ChatProvider>
+          <AppNavigator />
+        </ChatProvider>
       </AuthProvider>
     </AppConfigProvider>
   );

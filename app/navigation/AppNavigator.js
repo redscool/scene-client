@@ -19,14 +19,16 @@ import Venue from '../screens/Venue';
 import Cities from '../screens/Cities';
 import Ticket from '../screens/Ticket';
 import LandingPage from '../screens/LandingPage';
-import useAppConfig from '../../context/AppConfig';
+import useAppConfig from '../context/AppConfigContext';
 import ChatSupport from '../screens/ChatSupport';
+import useChat from '../context/ChatContext';
 
 const Stack = createNativeStackNavigator();
 
 export default AppNavigator = () => {
   const navigation = useNavigation();
   const {getToken, setFcmToken} = useAppConfig();
+  const {addSupportMessage} = useChat();
 
   useEffect(() => {
     getToken();
@@ -37,7 +39,12 @@ export default AppNavigator = () => {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      await addSupportMessage({
+        _id: remoteMessage.messageId,
+        message: remoteMessage.data.message,
+        createdAt: remoteMessage.sentTime,
+        isUser: false,
+      });
     });
 
     return unsubscribe;

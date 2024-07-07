@@ -2,14 +2,15 @@ import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import Logo from '../components/Logo';
 import fonts from '../config/fonts';
-import {getItem, getSecureItem} from '../utils/storage';
+import {getItem} from '../utils/storage';
 import routes from '../navigation/routes';
-import {SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
-import useAuth from '../../context/AuthContext';
-import useAppConfig from '../../context/AppConfig';
+import {STORAGE_KEY} from '../config/constants';
+import useAuth from '../context/AuthContext';
+import useAppConfig from '../context/AppConfigContext';
 
 const LandingPage = ({navigation}) => {
-  const {getCities, getEventTags, getTypes, getVenueTags} = useAppConfig();
+  const {getCities, getEventTags, getTypes, getVenueTags, setCity} =
+    useAppConfig();
   const {setAuth} = useAuth();
 
   const initApp = async () => {
@@ -21,6 +22,7 @@ const LandingPage = ({navigation}) => {
     const city = await getItem(STORAGE_KEY.CITY);
 
     if (city) {
+      setCity(city);
       navigation.reset({
         index: 0,
         routes: [{name: routes.TABS}],
