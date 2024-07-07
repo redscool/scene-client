@@ -1,11 +1,11 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import useConfig from '../context/AppConfigContext';
 import AppButton from './AppButton';
 import fonts from '../config/fonts';
+import useAppConfig from '../context/AppConfigContext';
 
 const Filters = ({category, setCategory, setTags}) => {
-  const {getAllEventTags, venueTags} = useConfig();
+  const {allEventTags, venueTags} = useAppConfig();
 
   const [filters, setFilters] = useState([]);
 
@@ -24,7 +24,7 @@ const Filters = ({category, setCategory, setTags}) => {
   };
 
   useEffect(() => {
-    if (category) setFilters(Object.values(getAllEventTags()));
+    if (category) setFilters(Object.values(allEventTags));
     else setFilters(Object.values(venueTags));
   }, [category]);
 
