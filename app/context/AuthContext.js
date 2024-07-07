@@ -1,7 +1,7 @@
 import {createContext, useContext, useState} from 'react';
 import useService from './ServiceContext';
-import { getSecureItem, setSecureItem } from '../app/utils/storage';
-import { SECURE_STORAGE_KEY, STORAGE_KEY } from '../app/config/constants';
+import { getSecureItem, setSecureItem } from '../utils/storage';
+import { SECURE_STORAGE_KEY, STORAGE_KEY } from '../config/constants';
 
 export const AuthContext = createContext();
 

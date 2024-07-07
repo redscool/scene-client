@@ -18,7 +18,7 @@ import Heading from '../components/Heading';
 import Subheading from '../components/Subheading';
 import routes from '../navigation/routes';
 import SearchItemCard from '../components/SearchItemCard';
-import useService from '../../context/ServiceContext';
+import useService from '../context/ServiceContext';
 import {getFileUrl} from '../utils/misc';
 import TextButton from '../components/TextButton';
 import fonts from '../config/fonts';

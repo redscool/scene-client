@@ -5,21 +5,25 @@ import CityCard from '../components/CityCard';
 import colors from '../config/colors';
 import fonts from '../config/fonts';
 import {getFileUrl} from '../utils/misc';
-import {ServiceContext} from '../../context/ServiceContext';
+import {ServiceContext} from '../context/ServiceContext';
 import {setItem} from '../utils/storage';
 import {STORAGE_KEY} from '../config/constants';
 import routes from '../navigation/routes';
+import useAppConfig from '../context/AppConfigContext';
 
 const Cities = ({navigation}) => {
-  const serviceObject = useContext(ServiceContext);
+  const {request} = useContext(ServiceContext);
+  const {setCity} = useAppConfig();
+
   const [cities, setCities] = useState([]);
   const getCities = async () => {
-    const res = await serviceObject.request('get', '/api/app/cities', {});
+    const res = await request('get', '/api/app/cities', {});
     setCities(res);
   };
 
   const handleSelectCity = async city => {
     await setItem(STORAGE_KEY.CITY, city);
+    setCity(city);
     navigation.reset({
       index: 0,
       routes: [{name: routes.TABS}],

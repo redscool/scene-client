@@ -5,7 +5,7 @@ import {
   request,
   requestFileServer,
   requestWithAccessToken,
-} from '../app/api/client';
+} from '../api/client';
 
 export const ServiceContext = createContext();
 

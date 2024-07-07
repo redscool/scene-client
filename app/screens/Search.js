@@ -8,8 +8,8 @@ import {STORAGE_KEY, filters, search_result_type} from '../config/constants';
 import SearchBar from '../components/SearchBar';
 import routes from '../navigation/routes';
 import Filters from '../components/Filters';
-import useService from '../../context/ServiceContext';
-import useConfig from '../../context/AppConfig';
+import useService from '../context/ServiceContext';
+import useConfig from '../context/AppConfigContext';
 import {getItem} from '../utils/storage';
 
 const Search = ({navigation}) => {

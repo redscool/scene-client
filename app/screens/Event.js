@@ -17,7 +17,7 @@ import Heading from '../components/Heading';
 import Paragraph from '../components/Paragraph';
 import Subheading from '../components/Subheading';
 import routes from '../navigation/routes';
-import useService from '../../context/ServiceContext';
+import useService from '../context/ServiceContext';
 import TextButton from '../components/TextButton';
 import fonts from '../config/fonts';
 import ShareButton from '../components/ShareButton';

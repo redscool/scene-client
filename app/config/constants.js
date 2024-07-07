@@ -109,3 +109,12 @@ export const TICKET_FLOWS = {
   INSTALL_APPS: 'INSTALL_APPS',
   SHOW_ADS: 'SHOW_ADS',
 };
+
+export const HEADERS = {
+  AUTHORIZATION: 'Authorization',
+  CITY_KEY: 'x-citykey',
+  BUNDLE_VERSION: 'x-bundleversion',
+  APP_VERSION: 'x-appversion',
+  DEVICE_ID: 'x-deviceid',
+  DEVICE: 'x-device',
+};

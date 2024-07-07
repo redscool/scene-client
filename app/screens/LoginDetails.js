@@ -6,7 +6,7 @@ import colors from '../config/colors';
 import fonts from '../config/fonts';
 import Icon from '../Icons';
 import routes from '../navigation/routes';
-import useService from '../../context/ServiceContext';
+import useService from '../context/ServiceContext';
 import {showToast} from '../components/widgets/toast';
 
 const LoginDetails = ({navigation}) => {

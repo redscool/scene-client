@@ -1,4 +1,4 @@
-import useService from "../../context/ServiceContext";
+import useService from "../context/ServiceContext";
 
 export default function useLogger() {
   const { request } = useService();

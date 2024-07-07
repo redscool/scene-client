@@ -2,6 +2,9 @@ import {createContext, useContext, useState} from 'react';
 import messaging from '@react-native-firebase/messaging';
 
 import useService from './ServiceContext';
+import {setItem} from '../utils/storage';
+import {HEADERS} from '../config/constants';
+import {showToast} from '../components/widgets/toast';
 
 const setMap = (data, setData) => {
   let temp = {};
@@ -31,6 +34,10 @@ export const AppConfigProvider = ({children}) => {
   const [types, setTypes] = useState({});
 
   const [fcmToken, setFcmToken] = useState();
+  const [city, setCity] = useState();
+
+  const [events, setEvents] = useState([]);
+  const [venues, setVenues] = useState([]);
 
   const getVenueTags = async () => {
     const tVenueTags = await request('get', '/api/app/venueTags', {});
@@ -87,6 +94,22 @@ export const AppConfigProvider = ({children}) => {
       });
   };
 
+  const getAppConfig = async () => {
+    try {
+      const res = await request('post', '/api/app/appConfig', {
+        fcmToken,
+        city,
+      });
+      const {events, venues, currentDeviceId} = res;
+      setEvents(events);
+      setVenues(venues);
+      await setItem(HEADERS.DEVICE_ID, currentDeviceId);
+    } catch (e) {
+      // TODO: error handling
+      showToast('Something went wrong.');
+    }
+  };
+
   return (
     <AppConfigContext.Provider
       value={{
@@ -104,6 +127,11 @@ export const AppConfigProvider = ({children}) => {
         getToken,
         fcmToken,
         setFcmToken,
+        getAppConfig,
+        events,
+        venues,
+        city,
+        setCity,
       }}>
       {children}
     </AppConfigContext.Provider>

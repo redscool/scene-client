@@ -2,7 +2,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
 import fonts from '../config/fonts';
-import useAppConfig from '../../context/AppConfig';
+import useAppConfig from '../context/AppConfigContext';
 
 const TagCard = ({fontStyle, style, tag}) => {
   const {allEventTags} = useAppConfig();
