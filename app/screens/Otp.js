@@ -10,12 +10,11 @@ import TextButton from '../components/TextButton';
 import Timer from '../components/Timer';
 import {showToast} from '../components/widgets/toast';
 import useService from '../context/ServiceContext';
-import {setItem, setSecureItem} from '../utils/storage';
-import {SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
+import useAuth from '../context/AuthContext';
 
 const OtpResetPassword = ({navigation, route}) => {
-  const {navigate} = navigation;
   const {request} = useService();
+  const {handleLogin} = useAuth();
 
   const email = route.params;
 
@@ -28,17 +27,31 @@ const OtpResetPassword = ({navigation, route}) => {
         otp,
         email,
       });
-      await setSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN, res.accessToken);
-      await setSecureItem(SECURE_STORAGE_KEY.REFRESH_TOKEN, res.refreshToken);
-      await setItem(STORAGE_KEY.USER_ID, res.userId);
-      if (res.profile) {
-        await setItem(STORAGE_KEY.NAME, res.profile.name);
-        await setItem(STORAGE_KEY.DOB, res.profile.dob);
-        await setItem(STORAGE_KEY.GENDER, res.profile.gender);
-        navigate(routes.TABS);
-      } else {
-        navigate(routes.COMPLETE_PROFILE);
-      }
+
+      const {accessToken, refreshToken, profileComplete, userId, profile} = res;
+
+      const name = profile && profile.name ? profile.name : '';
+      const dob = profile && profile.dob ? profile.dob : {};
+      const gender = profile && profile.gender ? profile.gender : '';
+
+      handleLogin({
+        accessToken,
+        refreshToken,
+        userId,
+        email,
+        dob,
+        name,
+        gender,
+      });
+
+      navigation.reset({
+        index: 0,
+        routes: [
+          {name: profileComplete ? routes.TABS : routes.COMPLETE_PROFILE},
+        ],
+      });
+
+      showToast('Login Successfully.');
     } catch (e) {
       // TODO: error handling
       console.log(e);

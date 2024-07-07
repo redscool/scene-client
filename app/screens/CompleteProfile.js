@@ -11,30 +11,16 @@ import {showToast} from '../components/widgets/toast';
 import routes from '../navigation/routes';
 import {setItem} from '../utils/storage';
 import {STORAGE_KEY} from '../config/constants';
+import useAppConfig from '../context/AppConfigContext';
 
 const CompleteProfile = ({navigation}) => {
-  const {request, requestWithAccessToken} = useService();
+  const {requestWithAccessToken} = useService();
   const {navigate} = navigation;
+  const {genders} = useAppConfig();
 
   const [name, setName] = useState('');
   const [date, setDate] = useState(new Date());
   const [selected, setSelected] = useState();
-  const [genders, setGenders] = useState([]);
-
-  const init = async () => {
-    try {
-      const res = await request('get', '/api/app/genders', {});
-      const temp = [];
-      for (const gender of res)
-        temp.push({
-          label: gender,
-        });
-      setGenders(temp);
-    } catch (e) {
-      // TODO: error handling
-      console.log(e);
-    }
-  };
 
   const handleContinue = async () => {
     if (!name || !selected) {
@@ -44,15 +30,27 @@ const CompleteProfile = ({navigation}) => {
     // TODO: error handling
     try {
       // TODO: no value entered
-      const res = await requestWithAccessToken(
-        'post',
-        '/api/auth/user/updateprofile',
-        {name, gender: selected.label, dob: date},
-      );
+      await requestWithAccessToken('post', '/api/auth/user/updateprofile', {
+        name,
+        gender: selected.label,
+        dob: date,
+      });
+
       await setItem(STORAGE_KEY.NAME, name);
-      await setItem(STORAGE_KEY.DOB, date.toString());
+      await setItem(
+        STORAGE_KEY.DOB,
+        JSON.stringify({
+          day: date.getDate(),
+          month: date.getMonth() + 1,
+          year: date.getFullYear(),
+        }),
+      );
       await setItem(STORAGE_KEY.GENDER, selected.label);
-      navigate(routes.TABS);
+
+      navigation.reset({
+        index: 0,
+        routes: [{name: routes.TABS}],
+      });
     } catch (e) {
       // TODO: error handling
       console.log(e);

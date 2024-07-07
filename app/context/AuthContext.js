@@ -1,7 +1,14 @@
 import {createContext, useContext, useState} from 'react';
 import useService from './ServiceContext';
-import { getSecureItem, setSecureItem } from '../utils/storage';
-import { SECURE_STORAGE_KEY, STORAGE_KEY } from '../config/constants';
+import {
+  getItem,
+  getSecureItem,
+  removeItem,
+  removeSecureItem,
+  setItem,
+  setSecureItem,
+} from '../utils/storage';
+import {SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
 
 export const AuthContext = createContext();
 
@@ -17,6 +24,10 @@ export const AuthProvider = ({children}) => {
   const [refreshToken, setRefreshToken] = useState();
   const [userId, setUserId] = useState();
 
+  const [name, setName] = useState();
+  const [dob, setDob] = useState();
+  const [gender, setGender] = useState();
+
   const setAuth = async () => {
     const accessToken = await getSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN);
     setAccessToken(accessToken);
@@ -24,41 +35,81 @@ export const AuthProvider = ({children}) => {
     const refreshToken = await getSecureItem(SECURE_STORAGE_KEY.REFRESH_TOKEN);
     setRefreshToken(refreshToken);
 
-    const userId = await getSecureItem(STORAGE_KEY.USER_ID);
+    const userId = await getItem(STORAGE_KEY.USER_ID);
     setUserId(userId);
 
-    const email = await getSecureItem(STORAGE_KEY.EMAIL);
+    const email = await getItem(STORAGE_KEY.EMAIL);
     setEmail(email);
+
+    const name = await getItem(STORAGE_KEY.NAME);
+    setName(name);
+
+    const gender = await getItem(STORAGE_KEY.GENDER);
+    setGender(gender);
+
+    const dob = await getItem(STORAGE_KEY.DOB);
+    setDob(JSON.parse(dob));
   };
 
-  const login = async (email, password) => {
-    const data = await request('post', '/api/auth/organiser/login', {
-      email,
-      password,
-    });
-
-    if (data?.error) return false;
-
-    const {accessToken, refreshToken, userId} = data;
-
+  const handleLogin = async ({
+    accessToken,
+    refreshToken,
+    userId,
+    email,
+    name,
+    dob,
+    gender,
+  }) => {
     await setSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN, accessToken);
     setAccessToken(accessToken);
 
     await setSecureItem(SECURE_STORAGE_KEY.REFRESH_TOKEN, refreshToken);
     setRefreshToken(refreshToken);
 
-    await setSecureItem(STORAGE_KEY.USER_ID, userId);
+    await setItem(STORAGE_KEY.USER_ID, userId);
     setUserId(userId);
 
-    await setSecureItem(STORAGE_KEY.EMAIL, email);
+    await setItem(STORAGE_KEY.EMAIL, email);
     setEmail(email);
 
-    return true;
+    await setItem(STORAGE_KEY.NAME, name);
+    setName(name);
+
+    await setItem(STORAGE_KEY.DOB, JSON.stringify(dob));
+    setDob(dob);
+
+    await setItem(STORAGE_KEY.GENDER, gender);
+    setGender(gender);
   };
+
+  const handleLogout = async () => {
+    await removeSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN);
+    setAccessToken('');
+
+    await removeSecureItem(SECURE_STORAGE_KEY.REFRESH_TOKEN);
+    setRefreshToken('');
+
+    await removeItem(STORAGE_KEY.USER_ID);
+    setUserId('');
+
+    await removeItem(STORAGE_KEY.EMAIL);
+    setEmail('');
+
+    await removeItem(STORAGE_KEY.NAME);
+    setName('');
+
+    await removeItem(STORAGE_KEY.DOB);
+    setDob({});
+
+    await removeItem(STORAGE_KEY.GENDER);
+    setGender('');
+  };
+
   return (
     <AuthContext.Provider
       value={{
-        login,
+        handleLogin,
+        handleLogout,
         email,
         setEmail,
         userId,
@@ -68,6 +119,12 @@ export const AuthProvider = ({children}) => {
         refreshToken,
         setRefreshToken,
         setAuth,
+        name,
+        setName,
+        dob,
+        setDob,
+        gender,
+        setGender,
       }}>
       {children}
     </AuthContext.Provider>
