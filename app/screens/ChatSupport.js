@@ -1,5 +1,5 @@
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import fonts from '../config/fonts';
 import Message from '../components/Message';
 import Input from '../components/Input';
@@ -53,11 +53,9 @@ const ChatSupport = () => {
       ) : (
         <FlatList
           data={messages}
+          inverted
+          contentContainerStyle={{flexDirection: 'column-reverse'}}
           renderItem={({item}) => <Message messageObj={item} />}
-          ref={ref => (this.FlatListRef = ref)}
-          onContentSizeChange={() =>
-            this.FlatListRef.scrollToEnd({animated: false})
-          }
         />
       )}
       <View style={styles.bottomContainer}>

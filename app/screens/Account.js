@@ -1,18 +1,15 @@
 import {FlatList, StyleSheet, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import AppButton from '../components/AppButton';
 import colors from '../config/colors';
 import ListItem from '../components/ListItem';
 import routes from '../navigation/routes';
-import {getSecureItem, removeItem, removeSecureItem} from '../utils/storage';
-import {SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
-import useUser from '../context/UserContext';
+import useAuth from '../context/AuthContext';
 
 export default Account = ({navigation}) => {
   const {navigate} = navigation;
-  // const {name, setName, setDob, setGender} = useUser();
-  const [accessToken, setAccessToken] = useState();
+  const {handleLogout, accessToken} = useAuth();
 
   const accountOptions = [
     {
@@ -51,27 +48,6 @@ export default Account = ({navigation}) => {
       onPress: () => navigate(routes.HELP),
     },
   ];
-
-  const handleLogout = async () => {
-    await removeSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN);
-    await removeSecureItem(SECURE_STORAGE_KEY.REFRESH_TOKEN);
-    await removeItem(STORAGE_KEY.DOB);
-    await removeItem(STORAGE_KEY.NAME);
-    await removeItem(STORAGE_KEY.GENDER);
-    await removeItem(STORAGE_KEY.USER_ID);
-    // setName(undefined);
-    // setDob(undefined);
-    // setGender(undefined);
-  };
-
-  const init = async () => {
-    const res = await getSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN);
-    setAccessToken(res);
-  };
-
-  useEffect(() => {
-    init();
-  }, []);
 
   return (
     <View style={styles.container}>

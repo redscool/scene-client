@@ -1,6 +1,5 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 import colors from '../config/colors';
@@ -9,8 +8,7 @@ import ListItem from '../components/ListItem';
 import routes from '../navigation/routes';
 import {showToast} from '../components/widgets/toast';
 import useService from '../context/ServiceContext';
-import {setItem, setSecureItem} from '../utils/storage';
-import {SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
+import useAuth from '../context/AuthContext';
 
 GoogleSignin.configure({
   webClientId:
@@ -20,6 +18,7 @@ GoogleSignin.configure({
 
 const Login = ({navigation}) => {
   const {request} = useService();
+  const {handleLogin} = useAuth();
 
   const {navigate} = navigation;
 
@@ -32,12 +31,30 @@ const Login = ({navigation}) => {
       const temp = await request('post', '/api/auth/user/googleLogin', {
         code: serverAuthCode,
       });
-      await setSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN, temp.accessToken);
-      await setSecureItem(SECURE_STORAGE_KEY.REFRESH_TOKEN, temp.refreshToken);
-      await setItem(STORAGE_KEY.USER_ID, temp.userId);
+
+      const email = res.user.email;
+      const {accessToken, refreshToken, profileComplete, userId, profile} =
+        temp;
+
+      const name = profile && profile.name ? profile.name : '';
+      const dob = profile && profile.dob ? profile.dob : {};
+      const gender = profile && profile.gender ? profile.gender : '';
+
+      handleLogin({
+        accessToken,
+        refreshToken,
+        userId,
+        email,
+        dob,
+        name,
+        gender,
+      });
+
       navigation.reset({
         index: 0,
-        routes: [{name: routes.HOME}],
+        routes: [
+          {name: profileComplete ? routes.TABS : routes.COMPLETE_PROFILE},
+        ],
       });
       showToast('Login Successfully.');
     } catch (e) {

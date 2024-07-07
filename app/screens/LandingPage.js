@@ -9,7 +9,7 @@ import useAuth from '../context/AuthContext';
 import useAppConfig from '../context/AppConfigContext';
 
 const LandingPage = ({navigation}) => {
-  const {getCities, getEventTags, getTypes, getVenueTags, setCity} =
+  const {getCities, getEventTags, getTypes, getVenueTags, getGenders, setCity} =
     useAppConfig();
   const {setAuth} = useAuth();
 
@@ -18,6 +18,8 @@ const LandingPage = ({navigation}) => {
     await getEventTags();
     await getTypes();
     await getVenueTags();
+    await getGenders();
+    await setAuth();
 
     const city = await getItem(STORAGE_KEY.CITY);
 

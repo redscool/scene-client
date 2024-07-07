@@ -39,6 +39,8 @@ export const AppConfigProvider = ({children}) => {
   const [events, setEvents] = useState([]);
   const [venues, setVenues] = useState([]);
 
+  const [genders, setGenders] = useState([]);
+
   const getVenueTags = async () => {
     const tVenueTags = await request('get', '/api/app/venueTags', {});
     setMap(tVenueTags, setVenueTags);
@@ -110,6 +112,22 @@ export const AppConfigProvider = ({children}) => {
     }
   };
 
+  const getGenders = async () => {
+    try {
+      const res = await request('get', '/api/app/genders', {});
+      const temp = [];
+      for (const gender of res)
+        temp.push({
+          label: gender,
+        });
+      setGenders(temp);
+    } catch (e) {
+      // TODO: error handling
+      console.log(e);
+      showToast('Something went wrong.');
+    }
+  };
+
   return (
     <AppConfigContext.Provider
       value={{
@@ -124,6 +142,7 @@ export const AppConfigProvider = ({children}) => {
         getEventTags,
         getCities,
         getTypes,
+        getGenders,
         getToken,
         fcmToken,
         setFcmToken,
@@ -132,6 +151,8 @@ export const AppConfigProvider = ({children}) => {
         venues,
         city,
         setCity,
+        genders,
+        getGenders,
       }}>
       {children}
     </AppConfigContext.Provider>
