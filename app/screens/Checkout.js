@@ -6,7 +6,7 @@ import colors from '../config/colors';
 import AppButton from '../components/AppButton';
 import {checkInstalledApp} from '../utils/misc';
 import {SECURE_STORAGE_KEY, TICKET_FLOWS} from '../config/constants';
-import useService from '../../context/ServiceContext';
+import useService from '../context/ServiceContext';
 import {showToast} from '../components/widgets/toast';
 import {getSecureItem} from '../utils/storage';
 import routes from '../navigation/routes';

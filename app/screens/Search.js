@@ -4,20 +4,20 @@ import React, {useEffect, useState} from 'react';
 
 import colors from '../config/colors';
 import SearchItemCard from '../components/SearchItemCard';
-import {STORAGE_KEY, filters, search_result_type} from '../config/constants';
 import SearchBar from '../components/SearchBar';
 import routes from '../navigation/routes';
 import Filters from '../components/Filters';
-import useService from '../../context/ServiceContext';
-import useConfig from '../../context/ConfigContext';
-import {getItem} from '../utils/storage';
+import useService from '../context/ServiceContext';
+import Loader from '../components/Loader';
+import useAppConfig from '../context/AppConfigContext';
 
 const Search = ({navigation}) => {
   const {navigate} = navigation;
   const {request} = useService();
-  const {timeTags} = useConfig();
+  const {timeTags, city: cityKey} = useAppConfig();
 
   const handleSearch = async () => {
+    setLoading(true);
     const tags = [],
       time = [];
     const timeTagsArray = [];
@@ -26,7 +26,6 @@ const Search = ({navigation}) => {
       if (tag in timeTags) time.push(tag);
       else tags.push(tag);
     }
-    const cityKey = await getItem(STORAGE_KEY.CITY);
     try {
       const labels = {};
       if (tags.length || time.length) {
@@ -44,6 +43,7 @@ const Search = ({navigation}) => {
       // TODO: error handling
       console.log(e);
     }
+    setLoading(false);
   };
 
   const [allTags, setAllTags] = useState([]);
@@ -53,6 +53,8 @@ const Search = ({navigation}) => {
   const [showFilters, setShowFilters] = useState(false);
 
   const [searchResults, setSearchResults] = useState();
+
+  const [loading, setLoading] = useState();
 
   useEffect(() => {
     handleSearch();
@@ -80,23 +82,27 @@ const Search = ({navigation}) => {
           />
         )}
       </View>
-      <FlatList
-        data={searchResults}
-        nestedScrollEnabled
-        keyExtractor={item => `${Math.random() * 1000} ${item.id.toString()}`}
-        renderItem={({item}) => (
-          <SearchItemCard
-            event={item}
-            key={`${Math.random() * 1000} ${item.id.toString()}`}
-            onPress={() =>
-              navigate(item.time ? routes.EVENT : routes.VENUE, item)
-            }
-            style={{alignSelf: 'center', marginTop: 25}}
-          />
-        )}
-        scrollEnabled={false}
-        style={{marginBottom: 60}}
-      />
+      {loading ? (
+        <Loader style={styles.loader} />
+      ) : (
+        <FlatList
+          data={searchResults}
+          nestedScrollEnabled
+          keyExtractor={item => `${Math.random() * 1000} ${item.id.toString()}`}
+          renderItem={({item}) => (
+            <SearchItemCard
+              event={item}
+              key={`${Math.random() * 1000} ${item.id.toString()}`}
+              onPress={() =>
+                navigate(item.time ? routes.EVENT : routes.VENUE, item)
+              }
+              style={{alignSelf: 'center', marginTop: 25}}
+            />
+          )}
+          scrollEnabled={false}
+          style={{marginBottom: 60}}
+        />
+      )}
     </ScrollView>
   );
 };
@@ -116,7 +122,11 @@ const styles = StyleSheet.create({
     marginTop: 15,
     width: '90%',
   },
-
+  loader: {
+    alignSelf: 'center',
+    height: 180,
+    width: 180,
+  },
   searchContainer: {
     alignItems: 'center',
     backgroundColor: colors.medium,

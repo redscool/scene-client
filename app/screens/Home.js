@@ -9,28 +9,17 @@ import EventCard from '../components/EventCard';
 import SectionHeading from '../components/SectionHeading';
 import TopEvent from '../components/TopEventContainer';
 import routes from '../navigation/routes';
-import useService from '../../context/ServiceContext';
-import {getItem} from '../utils/storage';
-import {STORAGE_KEY} from '../config/constants';
-import {showToast} from '../components/widgets/toast';
+import useAppConfig from '../context/AppConfigContext';
+import Loader from '../components/Loader';
 
 export default Home = ({navigation}) => {
-  const {request} = useService();
-  const [events, setEvents] = useState([]);
-  const [venues, setVenues] = useState([]);
-  const [topEvent, setTopEvent] = useState();
+  const {events, venues, getAppConfig} = useAppConfig();
+  const [loading, setLoading] = useState();
 
   const init = async () => {
-    try {
-      const city = await getItem(STORAGE_KEY.CITY);
-      const res = await request('get', '/api/app/appconfig', {city});
-      setEvents(res.events.slice(1));
-      setVenues(res.venues);
-      setTopEvent(res.events[0]);
-    } catch (e) {
-      // TODO: error handling
-      showToast('Something went wrong');
-    }
+    setLoading(true);
+    await getAppConfig();
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -38,70 +27,78 @@ export default Home = ({navigation}) => {
   }, []);
 
   return (
-    <ScrollView
-      alwaysBounceVertical={false}
-      scrollsToTop={false}
-      showsVerticalScrollIndicator={false}
-      style={styles.container}>
-      <LocationBar />
-      <TopEvent
-        event={topEvent}
-        onPress={() => navigation.navigate(routes.EVENT, topEvent)}
-      />
-      <SectionHeading style={{marginTop: 15}} title={'Around You'} />
-      {events && (
-        <FlatList
-          data={events}
-          horizontal
-          ItemSeparatorComponent={<View style={{width: 10}} />}
-          keyExtractor={item => item._id.toString()}
-          renderItem={({item, id}) => (
-            <EventCard
-              event={item}
-              onPress={() => navigation.navigate(routes.EVENT, item)}
-            />
-          )}
-          showsHorizontalScrollIndicator={false}
-          style={styles.eventsContainer}
-        />
-      )}
-      <AppButton
-        icon="search"
-        iconSize={18}
-        onPress={() => navigation.navigate(routes.SEARCH)}
-        solid
-        style={{alignSelf: 'center'}}
-        title="Explore"
-      />
-      <SectionHeading style={{marginTop: 15}} title={'Colleges'} />
-      {venues && (
+    <>
+      {loading ? (
+        <Loader style={styles.loader} />
+      ) : (
         <ScrollView
           alwaysBounceVertical={false}
-          directionalLockEnabled={true}
-          bounces={false}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.collegesContainer}>
-          <FlatList
-            contentContainerStyle={{alignSelf: 'flex-start'}}
-            data={venues}
-            key={`${venues.length}`}
-            keyExtractor={item => item._id}
-            numColumns={Math.ceil(venues.length / 2)}
-            renderItem={({item, index}) => (
-              <CollegeCard
-                key={item._id.toString()}
-                college={item}
-                onPress={() => navigation.navigate(routes.VENUE, item)}
-                style={{margin: 8}}
-              />
-            )}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
+          scrollsToTop={false}
+          showsVerticalScrollIndicator={false}
+          style={styles.container}>
+          <LocationBar />
+          {events ? (
+            <TopEvent
+              event={events[0]}
+              onPress={() => navigation.navigate(routes.EVENT, events[0])}
+            />
+          ) : null}
+          <SectionHeading style={{marginTop: 15}} title={'Around You'} />
+          {events && (
+            <FlatList
+              data={events}
+              horizontal
+              ItemSeparatorComponent={<View style={{width: 10}} />}
+              keyExtractor={item => item._id.toString()}
+              renderItem={({item, id}) => (
+                <EventCard
+                  event={item}
+                  onPress={() => navigation.navigate(routes.EVENT, item)}
+                />
+              )}
+              showsHorizontalScrollIndicator={false}
+              style={styles.eventsContainer}
+            />
+          )}
+          <AppButton
+            icon="search"
+            iconSize={18}
+            onPress={() => navigation.navigate(routes.SEARCH)}
+            solid
+            style={{alignSelf: 'center'}}
+            title="Explore"
           />
+          <SectionHeading style={{marginTop: 15}} title={'Colleges'} />
+          {venues && (
+            <ScrollView
+              alwaysBounceVertical={false}
+              directionalLockEnabled={true}
+              bounces={false}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.collegesContainer}>
+              <FlatList
+                contentContainerStyle={{alignSelf: 'flex-start'}}
+                data={venues}
+                key={`${venues.length}`}
+                keyExtractor={item => item._id}
+                numColumns={Math.ceil(venues.length / 2)}
+                renderItem={({item, index}) => (
+                  <CollegeCard
+                    key={item._id.toString()}
+                    college={item}
+                    onPress={() => navigation.navigate(routes.VENUE, item)}
+                    style={{margin: 8}}
+                  />
+                )}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+              />
+            </ScrollView>
+          )}
         </ScrollView>
       )}
-    </ScrollView>
+    </>
   );
 };
 
@@ -121,5 +118,11 @@ const styles = StyleSheet.create({
     height: 148,
     marginTop: 15,
     width: '90%',
+  },
+  loader: {
+    flex: 1,
+    alignSelf: 'center',
+    height: 180,
+    width: 180,
   },
 });

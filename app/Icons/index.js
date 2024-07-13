@@ -22,6 +22,7 @@ import Search from './Search';
 import Ticket from './Ticket';
 import Timer from './Timer';
 import Share from './Share';
+import Send from './Send';
 
 const map = {
   account: ({color, size, style}) => (
@@ -80,6 +81,9 @@ const map = {
   ),
   search: ({color, size, style}) => (
     <Search color={color} size={size} style={style} />
+  ),
+  send: ({color, size, style}) => (
+    <Send color={color} size={size} style={style} />
   ),
   share: ({color, size, style}) => (
     <Share color={color} size={size} style={style} />

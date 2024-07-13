@@ -1,11 +1,10 @@
 import axios from 'axios';
 import config from '../config/config.json';
 import {getItem, getSecureItem, setSecureItem} from '../utils/storage';
-import {SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
+import {HEADERS, SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
 import routes from '../navigation/routes';
 
 const SERVER = config.SERVER;
-const FILE_SERVER = config.FILE_SERVER;
 
 const getUpdatedUrl = (url, body = {}) => {
   let newUrl = url;
@@ -88,11 +87,18 @@ export const requestWithAccessToken =
   navigation =>
   async (method, route, body, replayed = false) => {
     const token = await getSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN);
-    // const city = await getSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN);
+    const appVersion = await getSecureItem(HEADERS.APP_VERSION);
+    const bundleVersion = await getSecureItem(HEADERS.BUNDLE_VERSION);
+    const device = await getSecureItem(HEADERS.DEVICE);
+    const deviceId = await getSecureItem(HEADERS.DEVICE_ID);
+
     const config = {
       headers: {
-        Authorization: token,
-        'x-citykey': 'delhi',
+        [HEADERS.AUTHORIZATION]: token,
+        [HEADERS.APP_VERSION]: appVersion,
+        [HEADERS.BUNDLE_VERSION]: bundleVersion,
+        [HEADERS.DEVICE]: device,
+        [HEADERS.DEVICE_ID]: deviceId,
       },
     };
 
@@ -117,7 +123,22 @@ export const requestWithAccessToken =
 
 export const request = navigation => async (method, route, body) => {
   try {
-    const res = await httpRequest(method, `${SERVER}${route}`, body, {});
+    const token = await getSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN);
+    const appVersion = await getItem(HEADERS.APP_VERSION);
+    const bundleVersion = await getItem(HEADERS.BUNDLE_VERSION);
+    const device = await getItem(HEADERS.DEVICE);
+    const deviceId = await getItem(HEADERS.DEVICE_ID);
+
+    const config = {
+      headers: {
+        [HEADERS.AUTHORIZATION]: token,
+        [HEADERS.APP_VERSION]: appVersion,
+        [HEADERS.BUNDLE_VERSION]: bundleVersion,
+        [HEADERS.DEVICE]: device,
+        [HEADERS.DEVICE_ID]: deviceId,
+      },
+    };
+    const res = await httpRequest(method, `${SERVER}${route}`, body, config);
     return res;
   } catch (err) {
     return {error: true};

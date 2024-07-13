@@ -6,15 +6,17 @@ import colors from '../config/colors';
 import fonts from '../config/fonts';
 import Icon from '../Icons';
 import routes from '../navigation/routes';
-import useService from '../../context/ServiceContext';
+import useService from '../context/ServiceContext';
 import {showToast} from '../components/widgets/toast';
 
 const LoginDetails = ({navigation}) => {
   const {navigate} = navigation;
   const {request} = useService();
   const [email, setEmail] = useState();
+  const [loading, setLoading] = useState();
 
   const handleContinue = async () => {
+    setLoading(true);
     try {
       await request('post', '/api/auth/user/login', {email});
       navigate(routes.OTP, email);
@@ -22,6 +24,7 @@ const LoginDetails = ({navigation}) => {
       // TODO: error handling
       showToast('Something went wrong.');
     }
+    setLoading(false);
   };
 
   return (
@@ -40,6 +43,7 @@ const LoginDetails = ({navigation}) => {
         />
       </View>
       <AppButton
+        active={!loading}
         fontStyle={styles.buttonFont}
         solid
         title="Continue"

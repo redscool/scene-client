@@ -17,24 +17,33 @@ import Heading from '../components/Heading';
 import Paragraph from '../components/Paragraph';
 import Subheading from '../components/Subheading';
 import routes from '../navigation/routes';
-import useService from '../../context/ServiceContext';
+import useService from '../context/ServiceContext';
 import TextButton from '../components/TextButton';
 import fonts from '../config/fonts';
 import ShareButton from '../components/ShareButton';
 import {showToast} from '../components/widgets/toast';
+import Loader from '../components/Loader';
+import useAuth from '../context/AuthContext';
 
 const Event = ({route, navigation}) => {
   const {request} = useService();
+  const {handleFavourites, favourites} = useAuth();
   const {navigate} = navigation;
 
   const [event, setEvent] = useState();
+  const [state, setState] = useState(false);
+
+  const [loading, setLoading] = useState();
 
   const init = async () => {
     const tEvent = route.params;
+    setLoading(true);
     if (!tEvent._id) {
       const res = await request('get', '/api/app/event', {eventId: tEvent.id});
       setEvent(res);
     } else setEvent(tEvent);
+    if (favourites[tEvent?._id] || favourites[tEvent?.id]) setState(true);
+    setLoading(false);
   };
 
   const handleViewMap = () => {
@@ -68,97 +77,104 @@ const Event = ({route, navigation}) => {
     init();
   }, []);
 
-  const [state, setState] = useState(false);
-
   return (
     <>
-      <View style={styles.bottomContainer}>
-        <AppButton
-          onPress={() => navigate(routes.CHECKOUT, event)}
-          solid
-          style={styles.registerButton}
-          fontStyle={styles.registerButtonFontStyle}
-          title="Register"
-        />
-        <View style={styles.buttons}>
-          <FavouriteButton
-            onPress={() => setState(!state)}
-            state={state}
-            style={styles.button}
-          />
-          <ShareButton
-            onPress={handleShare}
-            state={state}
-            style={styles.button}
-          />
-        </View>
-      </View>
-      <ScrollView
-        style={styles.container}
-        showsVerticalScrollIndicator={false}
-        bounces={false}>
-        {event && (
-          <EventBanner
-            imageUrl={getFileUrl(event?.bannerImage)}
-            style={styles.eventBanner}
-          />
-        )}
-        <Heading heading={event?.name} />
-        <View style={styles.detailsContainer}>
-          <DetailItem
-            iconName="calendar"
-            style={{marginBottom: 6}}
-            value={getTopEventFormattedDateTime(event?.startTime, false)}
-          />
-          <DetailItem
-            iconName="timer"
-            value={`${convertTimeToHHMMFormat(
-              new Date(event?.startTime),
-            )} - ${convertTimeToHHMMFormat(new Date(event?.endTime))}`}
-            style={{marginBottom: 6}}
-          />
-          <DetailItem
-            iconName="location"
-            value={`${event?.venueId?.abbreviation}, ${getAddress(
-              event?.venueId?.address,
-            )}`}
-            style={{marginBottom: 6}}
-          />
-          <TextButton
-            fontStyle={{
-              fontSize: 12,
-              fontFamily: fonts[600],
-              textDecorationLine: 'underline',
-            }}
-            onPress={handleViewMap}
-            style={{marginBottom: 10, marginLeft: 20}}
-            title="View in Maps"
-          />
+      {loading ? (
+        <Loader style={styles.loader} />
+      ) : (
+        <>
+          <View style={styles.bottomContainer}>
+            <AppButton
+              onPress={() => navigate(routes.CHECKOUT, event)}
+              solid
+              style={styles.registerButton}
+              fontStyle={styles.registerButtonFontStyle}
+              title="Register"
+            />
+            <View style={styles.buttons}>
+              <FavouriteButton
+                onPress={() => {
+                  setState(!state);
+                  handleFavourites(event);
+                }}
+                state={state}
+                style={styles.button}
+              />
+              <ShareButton
+                onPress={handleShare}
+                state={state}
+                style={styles.button}
+              />
+            </View>
+          </View>
+          <ScrollView
+            style={styles.container}
+            showsVerticalScrollIndicator={false}
+            bounces={false}>
+            {event && (
+              <EventBanner
+                imageUrl={getFileUrl(event?.bannerImage)}
+                style={styles.eventBanner}
+              />
+            )}
+            <Heading heading={event?.name} />
+            <View style={styles.detailsContainer}>
+              <DetailItem
+                iconName="calendar"
+                style={{marginBottom: 6}}
+                value={getTopEventFormattedDateTime(event?.startTime, false)}
+              />
+              <DetailItem
+                iconName="timer"
+                value={`${convertTimeToHHMMFormat(
+                  new Date(event?.startTime),
+                )} - ${convertTimeToHHMMFormat(new Date(event?.endTime))}`}
+                style={{marginBottom: 6}}
+              />
+              <DetailItem
+                iconName="location"
+                value={`${event?.venueId?.abbreviation}, ${getAddress(
+                  event?.venueId?.address,
+                )}`}
+                style={{marginBottom: 6}}
+              />
+              <TextButton
+                fontStyle={{
+                  fontSize: 12,
+                  fontFamily: fonts[600],
+                  textDecorationLine: 'underline',
+                }}
+                onPress={handleViewMap}
+                style={{marginBottom: 10, marginLeft: 20}}
+                title="View in Maps"
+              />
 
-          <DetailItem
-            iconName="rupee"
-            value={event?.price === 0 ? 'FREE' : event?.price}
-            style={{marginBottom: 6}}
-          />
-        </View>
-        <Subheading subheading="Gallery" />
-        <Carousel slides={event?.gallery} style={styles.carousel} />
-        <Subheading subheading="About" />
-        <Paragraph paragraph={event?.about} />
-        <Subheading subheading="Note" />
-        <Paragraph paragraph={event?.note} />
-        <Subheading subheading="More at DTU" />
-        <TextButton
-          fontStyle={{
-            fontSize: 12,
-            fontFamily: fonts[600],
-            textDecorationLine: 'underline',
-          }}
-          onPress={() => navigate(routes.VENUE, event?.venueId)}
-          style={{marginBottom: 80, marginLeft: 20}}
-          title="Show Venue"
-        />
-      </ScrollView>
+              <DetailItem
+                iconName="rupee"
+                value={event?.price === 0 ? 'FREE' : event?.price}
+                style={{marginBottom: 6}}
+              />
+            </View>
+            <Subheading subheading="Gallery" />
+            <Carousel slides={event?.gallery} style={styles.carousel} />
+            <Subheading subheading="About" />
+            <Paragraph paragraph={event?.about} />
+            <Subheading subheading="Note" />
+            <Paragraph paragraph={event?.note} />
+            <Subheading subheading="More at DTU" />
+            <TextButton
+              fontStyle={{
+                fontSize: 12,
+                fontFamily: fonts[600],
+                textDecorationLine: 'underline',
+              }}
+              onPress={() => navigate(routes.VENUE, event?.venueId)}
+              style={{marginBottom: 80, marginLeft: 20}}
+              title="Show Venue"
+            />
+          </ScrollView>
+        </>
+      )}
     </>
   );
 };
@@ -201,6 +217,12 @@ const styles = StyleSheet.create({
   eventBanner: {
     alignSelf: 'center',
     marginTop: 10,
+  },
+  loader: {
+    flex: 1,
+    alignSelf: 'center',
+    height: 180,
+    width: 180,
   },
   registerButton: {
     height: 35,

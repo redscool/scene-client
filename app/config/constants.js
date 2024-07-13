@@ -14,6 +14,7 @@ export const STORAGE_KEY = {
   NAME: 'NAME',
   DOB: 'DOB',
   GENDER: 'GENDER',
+  FAVOURITES: 'FAVOURITES',
 };
 
 export const SECURE_STORAGE_KEY = {
@@ -108,4 +109,13 @@ export const TICKET_FLOWS = {
   PAID: 'PAID',
   INSTALL_APPS: 'INSTALL_APPS',
   SHOW_ADS: 'SHOW_ADS',
+};
+
+export const HEADERS = {
+  AUTHORIZATION: 'Authorization',
+  CITY_KEY: 'x-citykey',
+  BUNDLE_VERSION: 'x-bundleversion',
+  APP_VERSION: 'x-appversion',
+  DEVICE_ID: 'x-deviceid',
+  DEVICE: 'x-device',
 };

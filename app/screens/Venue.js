@@ -18,22 +18,30 @@ import Heading from '../components/Heading';
 import Subheading from '../components/Subheading';
 import routes from '../navigation/routes';
 import SearchItemCard from '../components/SearchItemCard';
-import useService from '../../context/ServiceContext';
+import useService from '../context/ServiceContext';
 import {getFileUrl} from '../utils/misc';
 import TextButton from '../components/TextButton';
 import fonts from '../config/fonts';
 import ShareButton from '../components/ShareButton';
+import Loader from '../components/Loader';
+import useAuth from '../context/AuthContext';
 
 const Venue = ({route, navigation}) => {
   const {request} = useService();
+  const {handleFavourites, favourites} = useAuth();
   const {navigate} = navigation;
 
   const [venue, setVenue] = useState();
 
+  const [loading, setLoading] = useState();
+
   const init = async () => {
+    setLoading(true);
     let venueId = route.params._id ? route.params._id : route.params.id;
     const res = await request('get', '/api/app/venue', {venueId});
     setVenue(res);
+    if (favourites[venueId]) setState(true);
+    setLoading(false);
   };
 
   const handleViewMap = () => {
@@ -68,77 +76,87 @@ const Venue = ({route, navigation}) => {
   }, []);
 
   const [state, setState] = useState(false);
+
   return (
     <>
-      <View style={styles.bottomContainer}>
-        <View style={styles.buttonContainer}>
-          <FavouriteButton
-            onPress={() => setState(!state)}
-            state={state}
-            style={styles.favouriteButton}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <ShareButton
-            onPress={handleShare}
-            state={state}
-            style={styles.shareButton}
-          />
-        </View>
-      </View>
+      {loading ? (
+        <Loader style={styles.loader} />
+      ) : (
+        <>
+          <View style={styles.bottomContainer}>
+            <View style={styles.buttonContainer}>
+              <FavouriteButton
+                onPress={() => {
+                  setState(!state);
+                  handleFavourites(venue);
+                }}
+                state={state}
+                style={styles.favouriteButton}
+              />
+            </View>
+            <View style={styles.buttonContainer}>
+              <ShareButton
+                onPress={handleShare}
+                state={state}
+                style={styles.shareButton}
+              />
+            </View>
+          </View>
 
-      <ScrollView
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        style={styles.container}>
-        <EventBanner
-          imageUrl={getFileUrl(venue?.bannerImage)}
-          style={styles.eventBanner}
-        />
-        <Heading heading={venue?.name} />
-
-        <View style={styles.detailsContainer}>
-          <DetailItem
-            iconName="categories"
-            style={{marginBottom: 6}}
-            value={venue?.type}
-          />
-
-          <DetailItem
-            iconName="location"
-            style={{marginBottom: 6}}
-            value={venue?.address}
-          />
-          <TextButton
-            fontStyle={{
-              fontSize: 12,
-              fontFamily: fonts[600],
-              textDecorationLine: 'underline',
-            }}
-            onPress={handleViewMap}
-            style={{marginBottom: 10, marginLeft: 20}}
-            title="View in Maps"
-          />
-        </View>
-        <Subheading subheading="Gallery" />
-        <Carousel slides={venue?.gallery} style={styles.carousel} />
-        <Subheading subheading="Events" />
-
-        <FlatList
-          data={venue?.events}
-          keyExtractor={item => item._id.toString()}
-          nestedScrollEnabled
-          renderItem={({item}) => (
-            <SearchItemCard
-              event={item}
-              onPress={() => navigate(routes.EVENT, item)}
-              style={{alignSelf: 'center', marginTop: 25, marginBottom: 10}}
+          <ScrollView
+            bounces={false}
+            showsVerticalScrollIndicator={false}
+            style={styles.container}>
+            <EventBanner
+              imageUrl={getFileUrl(venue?.bannerImage)}
+              style={styles.eventBanner}
             />
-          )}
-          scrollEnabled={false}
-          style={{marginBottom: 60}}
-        />
-      </ScrollView>
+            <Heading heading={venue?.name} />
+
+            <View style={styles.detailsContainer}>
+              <DetailItem
+                iconName="categories"
+                style={{marginBottom: 6}}
+                value={venue?.type}
+              />
+
+              <DetailItem
+                iconName="location"
+                style={{marginBottom: 6}}
+                value={venue?.address}
+              />
+              <TextButton
+                fontStyle={{
+                  fontSize: 12,
+                  fontFamily: fonts[600],
+                  textDecorationLine: 'underline',
+                }}
+                onPress={handleViewMap}
+                style={{marginBottom: 10, marginLeft: 20}}
+                title="View in Maps"
+              />
+            </View>
+            <Subheading subheading="Gallery" />
+            <Carousel slides={venue?.gallery} style={styles.carousel} />
+            <Subheading subheading="Events" />
+
+            <FlatList
+              data={venue?.events}
+              keyExtractor={item => item._id.toString()}
+              nestedScrollEnabled
+              renderItem={({item}) => (
+                <SearchItemCard
+                  event={item}
+                  onPress={() => navigate(routes.EVENT, item)}
+                  style={{alignSelf: 'center', marginTop: 25, marginBottom: 10}}
+                />
+              )}
+              scrollEnabled={false}
+              style={{marginBottom: 60}}
+            />
+          </ScrollView>
+        </>
+      )}
     </>
   );
 };
@@ -179,5 +197,11 @@ const styles = StyleSheet.create({
     width: 48,
     borderRadius: 24,
     justifyContent: 'center',
+  },
+  loader: {
+    flex: 1,
+    alignSelf: 'center',
+    height: 180,
+    width: 180,
   },
 });

@@ -6,39 +6,45 @@ import DateInput from '../components/DateInput';
 import Dropdown from '../components/DropDown';
 import Input from '../components/Input';
 import VerifyImage from '../components/VerifyImage';
-import useService from '../../context/ServiceContext';
+import useService from '../context/ServiceContext';
 import {showToast} from '../components/widgets/toast';
 import routes from '../navigation/routes';
 import {setItem} from '../utils/storage';
 import {STORAGE_KEY} from '../config/constants';
-import useUser from '../../context/UserContext';
+import useAuth from '../context/AuthContext';
+import useAppConfig from '../context/AppConfigContext';
+import { StackActions } from '@react-navigation/native';
 
 const Profile = ({navigation}) => {
-  const {request, requestWithAccessToken} = useService();
-  const {navigate} = navigation;
-  const user = useUser();
+  const {requestWithAccessToken} = useService();
+  const {genders} = useAppConfig();
+  const {
+    name: userName,
+    dob: userDob,
+    gender: userGender,
+    accessToken,
+    setDob: userSetDob,
+    setName: userSetName,
+    setGender: userSetGender,
+  } = useAuth();
 
   const [name, setName] = useState('');
   const [date, setDate] = useState(new Date());
   const [selected, setSelected] = useState();
-  const [genders, setGenders] = useState([]);
 
   const init = async () => {
-    try {
-      const res = await request('get', '/api/app/genders', {});
-      const temp = [];
-      for (const gender of res)
-        temp.push({
-          label: gender,
-        });
-      setGenders(temp);
-    } catch (e) {
-      // TODO: error handling
-      console.log(e);
+    if (!accessToken) {
+      showToast('Please login first.');
+      navigation.dispatch(StackActions.replace(routes.LOGIN));
+      return;
     }
-    setName(user.name);
-    setSelected({label: user.gender});
-    // setName(user.dob);
+    setName(userName);
+    setSelected({label: userGender});
+    if (userDob?.day) {
+      const dateObj = new Date();
+      dateObj.setFullYear(userDob.year, userDob.month - 1, userDob.day);
+      setDate(dateObj);
+    }
   };
 
   const handleContinue = async () => {
@@ -46,18 +52,32 @@ const Profile = ({navigation}) => {
     // TODO: error handling
     try {
       // TODO: no value entered
-      const res = await requestWithAccessToken(
-        'post',
-        '/api/auth/user/updateprofile',
-        {name, gender: selected.label, dob: date},
-      );
+      await requestWithAccessToken('post', '/api/auth/user/updateprofile', {
+        name,
+        gender: selected.label,
+        dob: date,
+      });
+
       await setItem(STORAGE_KEY.NAME, name);
-      await setItem(STORAGE_KEY.DOB, date.toString());
+      await setItem(
+        STORAGE_KEY.DOB,
+        JSON.stringify({
+          day: date.getDate(),
+          month: date.getMonth() + 1,
+          year: date.getFullYear(),
+        }),
+      );
       await setItem(STORAGE_KEY.GENDER, selected.label);
-      user.setName(name);
-      user.setDob(date.toString());
-      user.setGender(selected.label);
-      navigate(routes.TABS);
+
+      userSetName(name);
+      userSetDob({
+        day: date.getDate(),
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+      });
+      userSetGender(selected.label);
+
+      showToast('Profile updated successfully');
     } catch (e) {
       // TODO: error handling
       console.log(e);
