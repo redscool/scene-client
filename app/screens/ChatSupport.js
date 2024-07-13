@@ -43,7 +43,7 @@ const ChatSupport = () => {
   useEffect(() => {
     getMessages();
   }, []);
-
+  console.log(messages);
   return (
     <View style={styles.container}>
       {messages.length == 0 ? (

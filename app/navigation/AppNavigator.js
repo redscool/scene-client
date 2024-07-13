@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Linking} from 'react-native';
-import messaging from '@react-native-firebase/messaging';
+import messaging, {firebase} from '@react-native-firebase/messaging';
 import React, {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
@@ -49,7 +49,20 @@ export default AppNavigator = () => {
 
     return unsubscribe;
   }, []);
+  useEffect(() => {
+    const unsubscribe = messaging().setBackgroundMessageHandler(
+      async remoteMessage => {
+        await addSupportMessage({
+          _id: remoteMessage.messageId,
+          message: remoteMessage.data.message,
+          createdAt: remoteMessage.sentTime,
+          isUser: false,
+        });
+      },
+    );
 
+    return unsubscribe;
+  }, []);
   useEffect(() => {
     const handleDeepLink = ({url}) => {
       const link = url.replace(/.*?:\/\//g, '');

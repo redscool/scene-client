@@ -19,8 +19,11 @@ const OtpResetPassword = ({navigation, route}) => {
   const email = route.params;
 
   const [otp, setOtp] = useState('');
+  const [loading, setLoading] = useState();
+  const [otpLoading, setOtpLoading] = useState();
 
   const handleContinue = async () => {
+    setLoading(true);
     try {
       if (!otp) return;
       const res = await request('post', '/api/auth/user/verifyOtp', {
@@ -57,9 +60,11 @@ const OtpResetPassword = ({navigation, route}) => {
       console.log(e);
       showToast('Something went wrong.');
     }
+    setLoading(false);
   };
 
   const handleResendOtp = async () => {
+    setOtpLoading(true);
     try {
       await request('post', '/api/auth/user/login', {email});
       showToast('Otp sent successfully.');
@@ -67,6 +72,7 @@ const OtpResetPassword = ({navigation, route}) => {
       // TODO: error handling
       showToast('Something went wrong.');
     }
+    setOtpLoading(false);
   };
   return (
     <View style={styles.container}>
@@ -78,12 +84,14 @@ const OtpResetPassword = ({navigation, route}) => {
       </View>
       <Timer style={styles.timer} time={'00:29'} />
       <TextButton
+        active={!otpLoading}
         fontStyle={styles.resendText}
         style={styles.resend}
         title="Resend OTP"
         onPress={handleResendOtp}
       />
       <AppButton
+        active={!loading}
         fontStyle={styles.buttonFont}
         onPress={handleContinue}
         solid

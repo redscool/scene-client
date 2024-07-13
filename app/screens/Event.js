@@ -23,12 +23,15 @@ import fonts from '../config/fonts';
 import ShareButton from '../components/ShareButton';
 import {showToast} from '../components/widgets/toast';
 import Loader from '../components/Loader';
+import useAuth from '../context/AuthContext';
 
 const Event = ({route, navigation}) => {
   const {request} = useService();
+  const {handleFavourites, favourites} = useAuth();
   const {navigate} = navigation;
 
   const [event, setEvent] = useState();
+  const [state, setState] = useState(false);
 
   const [loading, setLoading] = useState();
 
@@ -39,6 +42,7 @@ const Event = ({route, navigation}) => {
       const res = await request('get', '/api/app/event', {eventId: tEvent.id});
       setEvent(res);
     } else setEvent(tEvent);
+    if (favourites[tEvent?._id] || favourites[tEvent?.id]) setState(true);
     setLoading(false);
   };
 
@@ -73,8 +77,6 @@ const Event = ({route, navigation}) => {
     init();
   }, []);
 
-  const [state, setState] = useState(false);
-
   return (
     <>
       {loading ? (
@@ -91,7 +93,10 @@ const Event = ({route, navigation}) => {
             />
             <View style={styles.buttons}>
               <FavouriteButton
-                onPress={() => setState(!state)}
+                onPress={() => {
+                  setState(!state);
+                  handleFavourites(event);
+                }}
                 state={state}
                 style={styles.button}
               />

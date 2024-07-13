@@ -24,9 +24,11 @@ import TextButton from '../components/TextButton';
 import fonts from '../config/fonts';
 import ShareButton from '../components/ShareButton';
 import Loader from '../components/Loader';
+import useAuth from '../context/AuthContext';
 
 const Venue = ({route, navigation}) => {
   const {request} = useService();
+  const {handleFavourites, favourites} = useAuth();
   const {navigate} = navigation;
 
   const [venue, setVenue] = useState();
@@ -38,6 +40,7 @@ const Venue = ({route, navigation}) => {
     let venueId = route.params._id ? route.params._id : route.params.id;
     const res = await request('get', '/api/app/venue', {venueId});
     setVenue(res);
+    if (favourites[venueId]) setState(true);
     setLoading(false);
   };
 
@@ -83,7 +86,10 @@ const Venue = ({route, navigation}) => {
           <View style={styles.bottomContainer}>
             <View style={styles.buttonContainer}>
               <FavouriteButton
-                onPress={() => setState(!state)}
+                onPress={() => {
+                  setState(!state);
+                  handleFavourites(venue);
+                }}
                 state={state}
                 style={styles.favouriteButton}
               />

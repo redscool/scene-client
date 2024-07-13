@@ -9,7 +9,7 @@ import useAuth from '../context/AuthContext';
 
 export default Account = ({navigation}) => {
   const {navigate} = navigation;
-  const {handleLogout, accessToken} = useAuth();
+  const {handleLogout, accessToken, name} = useAuth();
 
   const accountOptions = [
     {
@@ -57,10 +57,7 @@ export default Account = ({navigation}) => {
           {...(!accessToken && {onPress: () => navigate(routes.LOGIN)})}
           solid
           style={{height: 30, marginLeft: 20, marginTop: 30, width: 155}}
-          title={
-            // accessToken ? (name ? name : 'User') :
-            'Login'
-          }
+          title={accessToken ? (name ? name : 'User') : 'Login'}
         />
       }
       <FlatList

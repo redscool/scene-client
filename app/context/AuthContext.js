@@ -27,6 +27,7 @@ export const AuthProvider = ({children}) => {
   const [name, setName] = useState();
   const [dob, setDob] = useState();
   const [gender, setGender] = useState();
+  const [favourites, setFavourites] = useState({});
 
   const setAuth = async () => {
     const accessToken = await getSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN);
@@ -49,6 +50,17 @@ export const AuthProvider = ({children}) => {
 
     const dob = await getItem(STORAGE_KEY.DOB);
     setDob(JSON.parse(dob));
+
+    const favourites = await getItem(STORAGE_KEY.FAVOURITES);
+    setFavourites(JSON.parse(favourites));
+  };
+
+  const handleFavourites = async item => {
+    const temp = {...favourites};
+    if (!temp[item._id]) temp[item._id] = item;
+    else temp[item._id] = undefined;
+    setFavourites(temp);
+    await setItem(STORAGE_KEY.FAVOURITES, JSON.stringify(temp));
   };
 
   const handleLogin = async ({
@@ -125,6 +137,8 @@ export const AuthProvider = ({children}) => {
         setDob,
         gender,
         setGender,
+        favourites,
+        handleFavourites,
       }}>
       {children}
     </AuthContext.Provider>

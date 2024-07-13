@@ -14,6 +14,7 @@ export const STORAGE_KEY = {
   NAME: 'NAME',
   DOB: 'DOB',
   GENDER: 'GENDER',
+  FAVOURITES: 'FAVOURITES',
 };
 
 export const SECURE_STORAGE_KEY = {
