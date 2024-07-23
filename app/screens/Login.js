@@ -69,11 +69,11 @@ const Login = ({navigation}) => {
       title: 'Login with Google',
       onPress: onGoogleButtonPress,
     },
-    {
-      icon: 'indianFlag',
-      title: 'Mobile Number',
-      onPress: () => console.log('Mobile Number'),
-    },
+    // {
+    //   icon: 'indianFlag',
+    //   title: 'Mobile Number',
+    //   onPress: () => console.log('Mobile Number'),
+    // },
     {
       icon: 'email',
       title: 'Login with Email',

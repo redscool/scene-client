@@ -6,6 +6,8 @@ import colors from '../config/colors';
 import ListItem from '../components/ListItem';
 import routes from '../navigation/routes';
 import useAuth from '../context/AuthContext';
+import SectionHeading from '../components/SectionHeading';
+import fonts from '../config/fonts';
 
 export default Account = ({navigation}) => {
   const {navigate} = navigation;
@@ -51,27 +53,44 @@ export default Account = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      {
-        <AppButton
-          fontStyle={{fontSize: 16}}
-          {...(!accessToken && {onPress: () => navigate(routes.LOGIN)})}
-          solid
-          style={{height: 30, marginLeft: 20, marginTop: 30, width: 155}}
-          title={accessToken ? (name ? name : 'User') : 'Login'}
-        />
-      }
-      <FlatList
-        data={accountOptions}
-        renderItem={({item, index}) => (
-          <ListItem
-            gradient={item.gradient}
-            icon={item.icon}
-            onPress={item.onPress}
-            style={{alignSelf: 'center', marginTop: 20}}
-            value={item.value}
+      {!accessToken ? (
+        <>
+          <AppButton
+            fontStyle={{fontSize: 16}}
+            {...(!accessToken && {onPress: () => navigate(routes.LOGIN)})}
+            solid
+            style={{height: 30, marginLeft: 20, marginTop: 30, width: 155}}
+            title={accessToken ? (name ? name : 'User') : 'Login'}
           />
-        )}
-      />
+          <ListItem
+            gradient={accountOptions[2].gradient}
+            icon={accountOptions[2].icon}
+            onPress={accountOptions[2].onPress}
+            style={{alignSelf: 'center', marginTop: 20}}
+            value={accountOptions[2].value}
+          />
+        </>
+      ) : (
+        <>
+          <SectionHeading
+            title={name}
+            style={{marginVertical: 20}}
+            fontStyle={{fontSize: 20, fontFamily: fonts[500]}}
+          />
+          <FlatList
+            data={accountOptions}
+            renderItem={({item, index}) => (
+              <ListItem
+                gradient={item.gradient}
+                icon={item.icon}
+                onPress={item.onPress}
+                style={{alignSelf: 'center', marginTop: 20}}
+                value={item.value}
+              />
+            )}
+          />
+        </>
+      )}
     </View>
   );
 };

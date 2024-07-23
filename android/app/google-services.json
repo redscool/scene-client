@@ -7,6 +7,50 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:986368488233:android:ec81ed9f8a7e19401dfd38",
+        "android_client_info": {
+          "package_name": "com.baljeetkode.scene"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "986368488233-3gr0sq4fmhfav5kkg1mvcn3u9paljcov.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.baljeetkode.scene",
+            "certificate_hash": "2e052070180b9a2965393aaa4ac2fccd5aeccbc5"
+          }
+        },
+        {
+          "client_id": "986368488233-f3bpk3fh3264m0kpdkh191g7odr6fft8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaTWjgGFp4HyezL_Rws1IBnT5za8hplLo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "986368488233-f3bpk3fh3264m0kpdkh191g7odr6fft8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "986368488233-m8o1ikdl0bgulu9s03vp0hq3h6rbq9db.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.ProjectW"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:986368488233:android:4f1134e06c6bdf301dfd38",
         "android_client_info": {
           "package_name": "com.projectw"
@@ -37,6 +81,13 @@
             {
               "client_id": "986368488233-f3bpk3fh3264m0kpdkh191g7odr6fft8.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "986368488233-m8o1ikdl0bgulu9s03vp0hq3h6rbq9db.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.ProjectW"
+              }
             }
           ]
         }

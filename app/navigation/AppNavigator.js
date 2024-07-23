@@ -65,6 +65,7 @@ export default AppNavigator = () => {
   }, []);
   useEffect(() => {
     const handleDeepLink = ({url}) => {
+      console.log(url);
       const link = url.replace(/.*?:\/\//g, '');
       const routeName = link.split('/')[0];
       const route = routeName.split('?')[0];
@@ -119,7 +120,11 @@ export default AppNavigator = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen name={routes.CHECKOUT} component={Checkout} />
-      <Stack.Screen name={routes.MY_TICKETS} component={MyTickets} />
+      <Stack.Screen
+        name={routes.MY_TICKETS}
+        component={MyTickets}
+        options={{title: 'My Tickets'}}
+      />
       <Stack.Screen name={routes.PROFILE} component={Profile} />
       <Stack.Screen name={routes.FAVOURITES} component={Favourites} />
       <Stack.Screen name={routes.TICKET} component={Ticket} />

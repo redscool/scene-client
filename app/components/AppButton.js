@@ -16,6 +16,7 @@ const AppButton = ({
   solid,
   style,
   title,
+  withLoaderActive = true,
 }) => {
   return (
     <Pressable
@@ -24,7 +25,7 @@ const AppButton = ({
         styles.container,
         solid ? styles.solidButton : null,
         style,
-        active ? null : styles.inactive,
+        active && withLoaderActive ? null : styles.inactive,
       ]}>
       {!active ? <Loader style={styles.loader} /> : null}
       {icon && (

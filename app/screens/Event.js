@@ -28,6 +28,7 @@ import useAuth from '../context/AuthContext';
 const Event = ({route, navigation}) => {
   const {request} = useService();
   const {handleFavourites, favourites} = useAuth();
+  const {tickets} = useAuth();
   const {navigate} = navigation;
 
   const [event, setEvent] = useState();
@@ -42,7 +43,8 @@ const Event = ({route, navigation}) => {
       const res = await request('get', '/api/app/event', {eventId: tEvent.id});
       setEvent(res);
     } else setEvent(tEvent);
-    if (favourites[tEvent?._id] || favourites[tEvent?.id]) setState(true);
+    if (favourites && (favourites[tEvent?._id] || favourites[tEvent?.id]))
+      setState(true);
     setLoading(false);
   };
 
@@ -85,11 +87,12 @@ const Event = ({route, navigation}) => {
         <>
           <View style={styles.bottomContainer}>
             <AppButton
+              withLoaderActive={tickets[event?._id] ? false : true}
               onPress={() => navigate(routes.CHECKOUT, event)}
               solid
               style={styles.registerButton}
               fontStyle={styles.registerButtonFontStyle}
-              title="Register"
+              title={tickets[event?._id] ? 'Registered' : 'Register'}
             />
             <View style={styles.buttons}>
               <FavouriteButton
