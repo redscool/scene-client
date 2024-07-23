@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     flexDirection: 'row',
     borderWidth: 1,
+    marginTop: 'auto',
   },
   button: {
     width: 32,

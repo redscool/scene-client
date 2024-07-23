@@ -40,7 +40,7 @@ const Venue = ({route, navigation}) => {
     let venueId = route.params._id ? route.params._id : route.params.id;
     const res = await request('get', '/api/app/venue', {venueId});
     setVenue(res);
-    if (favourites[venueId]) setState(true);
+    if (favourites && favourites[venueId]) setState(true);
     setLoading(false);
   };
 

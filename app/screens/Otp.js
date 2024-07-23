@@ -31,6 +31,12 @@ const OtpResetPassword = ({navigation, route}) => {
         email,
       });
 
+      if (res?.error) {
+        showToast('Incorrect OTP.');
+        setLoading(false);
+        return;
+      }
+
       const {accessToken, refreshToken, profileComplete, userId, profile} = res;
 
       const name = profile && profile.name ? profile.name : '';

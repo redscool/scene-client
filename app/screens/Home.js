@@ -46,7 +46,7 @@ export default Home = ({navigation}) => {
           <SectionHeading style={{marginTop: 15}} title={'Around You'} />
           {events && (
             <FlatList
-              data={events}
+              data={events.slice(1)}
               horizontal
               ItemSeparatorComponent={<View style={{width: 10}} />}
               keyExtractor={item => item._id.toString()}

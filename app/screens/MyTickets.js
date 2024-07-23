@@ -1,56 +1,35 @@
-import {StyleSheet, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import useService from '../context/ServiceContext';
+import {FlatList, StyleSheet, View} from 'react-native';
+import React from 'react';
 import SearchItemCard from '../components/SearchItemCard';
 import routes from '../navigation/routes';
-import {showToast} from '../components/widgets/toast';
-import Loader from '../components/Loader';
+import Paragraph from '../components/Paragraph';
+import useAuth from '../context/AuthContext';
 
 const MyTickets = ({navigation}) => {
-  const {requestWithAccessToken} = useService();
-
+  const {tickets} = useAuth();
   const {navigate} = navigation;
-
-  const [tickets, setTickets] = useState();
-  const [loading, setLoading] = useState();
-
-  const init = async () => {
-    setLoading(true);
-    try {
-      const res = await requestWithAccessToken(
-        'get',
-        '/api/app/event/tickets',
-        {},
-      );
-      setTickets(res);
-    } catch (e) {
-      // TODO: error handling
-      showToast('Something went wrong.');
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    init();
-  }, []);
-
   return (
-    <>
-      {loading ? (
-        <Loader style={styles.loader} />
-      ) : (
-        <View style={styles.container}>
-          {tickets?.map((ticket, index) => (
+    <View style={styles.container}>
+      {Object.values(tickets).length ? (
+        <FlatList
+          data={Object.values(tickets)}
+          keyExtractor={item => item._id}
+          renderItem={({index, item}) => (
             <SearchItemCard
-              event={ticket.event}
+              event={item.event}
               key={`ticket-${index}`}
-              onPress={() => navigate(routes.TICKET, ticket._id)}
+              onPress={() => navigate(routes.EVENT, item.event)}
               style={{marginTop: 16}}
             />
-          ))}
-        </View>
+          )}
+        />
+      ) : (
+        <Paragraph
+          paragraph={'Nothing to show here.'}
+          style={{marginTop: 196, width: 'auto'}}
+        />
       )}
-    </>
+    </View>
   );
 };
 
@@ -60,11 +39,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-  },
-  loader: {
-    flex: 1,
-    alignSelf: 'center',
-    height: 180,
-    width: 180,
   },
 });
