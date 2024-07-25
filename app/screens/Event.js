@@ -23,12 +23,16 @@ import fonts from '../config/fonts';
 import ShareButton from '../components/ShareButton';
 import {showToast} from '../components/widgets/toast';
 import Loader from '../components/Loader';
+import useAuth from '../context/AuthContext';
 
 const Event = ({route, navigation}) => {
   const {request} = useService();
+  const {handleFavourites, favourites} = useAuth();
+  const {tickets} = useAuth();
   const {navigate} = navigation;
 
   const [event, setEvent] = useState();
+  const [state, setState] = useState(false);
 
   const [loading, setLoading] = useState();
 
@@ -39,6 +43,8 @@ const Event = ({route, navigation}) => {
       const res = await request('get', '/api/app/event', {eventId: tEvent.id});
       setEvent(res);
     } else setEvent(tEvent);
+    if (favourites && (favourites[tEvent?._id] || favourites[tEvent?.id]))
+      setState(true);
     setLoading(false);
   };
 
@@ -73,8 +79,6 @@ const Event = ({route, navigation}) => {
     init();
   }, []);
 
-  const [state, setState] = useState(false);
-
   return (
     <>
       {loading ? (
@@ -83,15 +87,19 @@ const Event = ({route, navigation}) => {
         <>
           <View style={styles.bottomContainer}>
             <AppButton
+              withLoaderActive={tickets[event?._id] ? false : true}
               onPress={() => navigate(routes.CHECKOUT, event)}
               solid
               style={styles.registerButton}
               fontStyle={styles.registerButtonFontStyle}
-              title="Register"
+              title={tickets[event?._id] ? 'Registered' : 'Register'}
             />
             <View style={styles.buttons}>
               <FavouriteButton
-                onPress={() => setState(!state)}
+                onPress={() => {
+                  setState(!state);
+                  handleFavourites(event);
+                }}
                 state={state}
                 style={styles.button}
               />

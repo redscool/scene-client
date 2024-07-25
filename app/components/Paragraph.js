@@ -4,7 +4,7 @@ import fonts from '../config/fonts';
 
 const Paragraph = ({fontStyle, paragraph, style}) => {
   return (
-    <View style={[style, styles.container]}>
+    <View style={[styles.container, style]}>
       <Text style={[styles.text, fontStyle]}>{paragraph}</Text>
     </View>
   );

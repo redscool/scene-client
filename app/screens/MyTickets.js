@@ -1,45 +1,34 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import useService from '../context/ServiceContext';
+import {FlatList, StyleSheet, View} from 'react-native';
+import React from 'react';
 import SearchItemCard from '../components/SearchItemCard';
 import routes from '../navigation/routes';
-import {showToast} from '../components/widgets/toast';
+import Paragraph from '../components/Paragraph';
+import useAuth from '../context/AuthContext';
 
 const MyTickets = ({navigation}) => {
-  const {requestWithAccessToken} = useService();
-
+  const {tickets} = useAuth();
   const {navigate} = navigation;
-
-  const [tickets, setTickets] = useState();
-
-  const init = async () => {
-    try {
-      const res = await requestWithAccessToken(
-        'get',
-        '/api/app/event/tickets',
-        {},
-      );
-      setTickets(res);
-    } catch (e) {
-      // TODO: error handling
-      showToast('Something went wrong.');
-    }
-  };
-
-  useEffect(() => {
-    init();
-  }, []);
-
   return (
     <View style={styles.container}>
-      {tickets?.map((ticket, index) => (
-        <SearchItemCard
-          event={ticket.event}
-          key={`ticket-${index}`}
-          onPress={() => navigate(routes.TICKET, ticket._id)}
-          style={{marginTop: 16}}
+      {Object.values(tickets).length ? (
+        <FlatList
+          data={Object.values(tickets)}
+          keyExtractor={item => item._id}
+          renderItem={({index, item}) => (
+            <SearchItemCard
+              event={item.event}
+              key={`ticket-${index}`}
+              onPress={() => navigate(routes.EVENT, item.event)}
+              style={{marginTop: 16}}
+            />
+          )}
         />
-      ))}
+      ) : (
+        <Paragraph
+          paragraph={'Nothing to show here.'}
+          style={{marginTop: 196, width: 'auto'}}
+        />
+      )}
     </View>
   );
 };

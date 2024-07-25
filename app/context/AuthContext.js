@@ -9,6 +9,7 @@ import {
   setSecureItem,
 } from '../utils/storage';
 import {SECURE_STORAGE_KEY, STORAGE_KEY} from '../config/constants';
+import {showToast} from '../components/widgets/toast';
 
 export const AuthContext = createContext();
 
@@ -17,7 +18,7 @@ export default function useAuth() {
 }
 
 export const AuthProvider = ({children}) => {
-  const {request} = useService();
+  const {requestWithAccessToken} = useService();
 
   const [email, setEmail] = useState();
   const [accessToken, setAccessToken] = useState();
@@ -27,6 +28,9 @@ export const AuthProvider = ({children}) => {
   const [name, setName] = useState();
   const [dob, setDob] = useState();
   const [gender, setGender] = useState();
+  const [favourites, setFavourites] = useState({});
+
+  const [tickets, setTickets] = useState({});
 
   const setAuth = async () => {
     const accessToken = await getSecureItem(SECURE_STORAGE_KEY.ACCESS_TOKEN);
@@ -49,6 +53,19 @@ export const AuthProvider = ({children}) => {
 
     const dob = await getItem(STORAGE_KEY.DOB);
     setDob(JSON.parse(dob));
+
+    const favourites = await getItem(STORAGE_KEY.FAVOURITES);
+    setFavourites(JSON.parse(favourites));
+
+    await initTickets();
+  };
+
+  const handleFavourites = async item => {
+    const temp = {...favourites};
+    if (!temp[item._id]) temp[item._id] = item;
+    else temp[item._id] = undefined;
+    setFavourites(temp);
+    await setItem(STORAGE_KEY.FAVOURITES, JSON.stringify(temp));
   };
 
   const handleLogin = async ({
@@ -80,6 +97,8 @@ export const AuthProvider = ({children}) => {
 
     await setItem(STORAGE_KEY.GENDER, gender);
     setGender(gender);
+
+    await initTickets();
   };
 
   const handleLogout = async () => {
@@ -105,6 +124,24 @@ export const AuthProvider = ({children}) => {
     setGender('');
   };
 
+  const initTickets = async () => {
+    try {
+      const res = await requestWithAccessToken(
+        'get',
+        '/api/app/event/tickets',
+        {},
+      );
+      const tickets = {};
+      for (const ticket of res) tickets[ticket?.event?._id] = ticket;
+      setTickets(tickets);
+      console.log(tickets);
+    } catch (e) {
+      // TODO: error handling
+      console.log(e);
+      showToast('Something went wrong.');
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -125,6 +162,11 @@ export const AuthProvider = ({children}) => {
         setDob,
         gender,
         setGender,
+        favourites,
+        handleFavourites,
+        tickets,
+        setTickets,
+        initTickets,
       }}>
       {children}
     </AuthContext.Provider>

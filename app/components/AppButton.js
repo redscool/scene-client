@@ -4,8 +4,10 @@ import {StyleSheet, Text, Pressable, View} from 'react-native';
 import colors from '../config/colors';
 import fonts from '../config/fonts';
 import Icon from '../Icons';
+import Loader from './Loader';
 
 const AppButton = ({
+  active = true,
   fontStyle,
   icon,
   iconColor,
@@ -14,11 +16,18 @@ const AppButton = ({
   solid,
   style,
   title,
+  withLoaderActive = true,
 }) => {
   return (
     <Pressable
-      onPress={onPress}
-      style={[styles.container, solid ? styles.solidButton : null, style]}>
+      onPress={active ? onPress : () => {}}
+      style={[
+        styles.container,
+        solid ? styles.solidButton : null,
+        style,
+        active && withLoaderActive ? null : styles.inactive,
+      ]}>
+      {!active ? <Loader style={styles.loader} /> : null}
       {icon && (
         <Icon
           color={iconColor ? iconColor : solid ? colors.medium : colors.primary}
@@ -53,6 +62,15 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     width: 140,
+  },
+  inactive: {
+    opacity: 0.5,
+  },
+  loader: {
+    width: 80,
+    height: 80,
+    zIndex: 2,
+    position: 'absolute',
   },
   solidButton: {
     backgroundColor: colors.primary,

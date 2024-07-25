@@ -19,6 +19,7 @@ export const ChatProvider = ({children}) => {
         'get',
         '/api/app/help/getMessages',
       );
+      console.log(res);
       setSupportMessages(res.messages);
     } catch (e) {
       // TODO: error handling

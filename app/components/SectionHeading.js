@@ -4,12 +4,12 @@ import {StyleSheet, Text, View} from 'react-native';
 import colors from '../config/colors';
 import fonts from '../config/fonts';
 
-export default SectionHeading = ({style, title}) => {
+export default SectionHeading = ({style, title, fontStyle}) => {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.line} />
       <View style={styles.titleContainer}>
-        <Text>{title}</Text>
+        <Text style={[fontStyle]}>{title}</Text>
       </View>
       <View style={styles.line} />
     </View>
@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flexDirection: 'row',
-    height: 18,
     justifyContent: 'space-evenly',
     width: '100%',
   },
@@ -37,6 +36,5 @@ const styles = StyleSheet.create({
   titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: '30%',
   },
 });

@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Linking} from 'react-native';
-import messaging from '@react-native-firebase/messaging';
+import messaging, {firebase} from '@react-native-firebase/messaging';
 import React, {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
@@ -49,9 +49,23 @@ export default AppNavigator = () => {
 
     return unsubscribe;
   }, []);
+  useEffect(() => {
+    const unsubscribe = messaging().setBackgroundMessageHandler(
+      async remoteMessage => {
+        await addSupportMessage({
+          _id: remoteMessage.messageId,
+          message: remoteMessage.data.message,
+          createdAt: remoteMessage.sentTime,
+          isUser: false,
+        });
+      },
+    );
 
+    return unsubscribe;
+  }, []);
   useEffect(() => {
     const handleDeepLink = ({url}) => {
+      console.log(url);
       const link = url.replace(/.*?:\/\//g, '');
       const routeName = link.split('/')[0];
       const route = routeName.split('?')[0];
@@ -106,7 +120,11 @@ export default AppNavigator = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen name={routes.CHECKOUT} component={Checkout} />
-      <Stack.Screen name={routes.MY_TICKETS} component={MyTickets} />
+      <Stack.Screen
+        name={routes.MY_TICKETS}
+        component={MyTickets}
+        options={{title: 'My Tickets'}}
+      />
       <Stack.Screen name={routes.PROFILE} component={Profile} />
       <Stack.Screen name={routes.FAVOURITES} component={Favourites} />
       <Stack.Screen name={routes.TICKET} component={Ticket} />

@@ -12,11 +12,17 @@ import routes from '../navigation/routes';
 import {setItem} from '../utils/storage';
 import {STORAGE_KEY} from '../config/constants';
 import useAppConfig from '../context/AppConfigContext';
+import useAuth from '../context/AuthContext';
 
 const CompleteProfile = ({navigation}) => {
   const {requestWithAccessToken} = useService();
   const {navigate} = navigation;
   const {genders} = useAppConfig();
+  const {
+    setDob: userSetDob,
+    setName: userSetName,
+    setGender: userSetGender,
+  } = useAuth();
 
   const [name, setName] = useState('');
   const [date, setDate] = useState(new Date());
@@ -47,6 +53,14 @@ const CompleteProfile = ({navigation}) => {
       );
       await setItem(STORAGE_KEY.GENDER, selected.label);
 
+      userSetName(name);
+      userSetDob({
+        day: date.getDate(),
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+      });
+      userSetGender(selected.label);
+
       navigation.reset({
         index: 0,
         routes: [{name: routes.TABS}],
@@ -57,10 +71,6 @@ const CompleteProfile = ({navigation}) => {
       showToast('Something went wrong');
     }
   };
-
-  useEffect(() => {
-    init();
-  }, []);
 
   return (
     <View style={styles.container}>

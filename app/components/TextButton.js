@@ -4,9 +4,11 @@ import React from 'react';
 import colors from '../config/colors';
 import fonts from '../config/fonts';
 
-const TextButton = ({title, style, onPress, fontStyle}) => {
+const TextButton = ({title, style, onPress, fontStyle, active = true}) => {
   return (
-    <Pressable onPress={onPress} style={[styles.container, style]}>
+    <Pressable
+      onPress={active ? onPress : () => {}}
+      style={[styles.container, style, !active ? styles.inactive : {}]}>
       <Text style={[styles.text, fontStyle]}>{title}</Text>
     </Pressable>
   );
@@ -16,7 +18,10 @@ export default TextButton;
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center"
+    justifyContent: 'center',
+  },
+  inactive: {
+    opacity: 0.5,
   },
   text: {
     color: colors.primary,
