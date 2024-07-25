@@ -1,5 +1,8 @@
-import {ToastAndroid} from 'react-native';
+import Toast from 'react-native-simple-toast';
 
-export const showToast = text => {
-  ToastAndroid.show(text, ToastAndroid.SHORT);
-};
+export const showToast = (text) => {
+    Toast.show(
+        text,
+        Toast.SHORT,
+    );
+}
