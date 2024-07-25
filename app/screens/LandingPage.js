@@ -7,6 +7,7 @@ import routes from '../navigation/routes';
 import {STORAGE_KEY} from '../config/constants';
 import useAuth from '../context/AuthContext';
 import useAppConfig from '../context/AppConfigContext';
+import { requestTrackingPermission } from 'react-native-tracking-transparency';
 
 const LandingPage = ({navigation}) => {
   const {getCities, getEventTags, getTypes, getVenueTags, getGenders, setCity} =
@@ -20,6 +21,9 @@ const LandingPage = ({navigation}) => {
     await getVenueTags();
     await getGenders();
     await setAuth();
+
+    const trackingStatus = await requestTrackingPermission();
+    if (trackingStatus === 'authorized' || trackingStatus === 'unavailable') {}
 
     const city = await getItem(STORAGE_KEY.CITY);
 

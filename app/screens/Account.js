@@ -75,7 +75,7 @@ export default Account = ({navigation}) => {
           <SectionHeading
             title={name}
             style={{marginVertical: 20}}
-            fontStyle={{fontSize: 20, fontFamily: fonts[500]}}
+            fontStyle={{fontSize: 20, fontFamily: fonts[500], color: colors.text}}
           />
           <FlatList
             data={accountOptions}

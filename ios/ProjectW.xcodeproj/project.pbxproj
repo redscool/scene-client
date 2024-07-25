@@ -549,6 +549,8 @@
 				DEVELOPMENT_TEAM = LN4778XF7V;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = ProjectW/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Scene App";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -583,6 +585,8 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LN4778XF7V;
 				INFOPLIST_FILE = ProjectW/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Scene App";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

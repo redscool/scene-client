@@ -1,10 +1,10 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import colors from '../config/colors';
 import fonts from '../config/fonts';
 
-export default SectionHeading = ({style, title, fontStyle}) => {
+export default SectionHeading = ({ style, title, fontStyle }) => {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.line} />
