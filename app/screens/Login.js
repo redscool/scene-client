@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View, Platform } from 'react-native';
 import React from 'react';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
@@ -64,11 +64,13 @@ const Login = ({navigation}) => {
     }
   };
   const options = [
-    {
-      icon: 'google',
-      title: 'Login with Google',
-      onPress: onGoogleButtonPress,
-    },
+    ...(Platform.OS !== 'ios' ? [
+      {
+        icon: 'google',
+        title: 'Login with Google',
+        onPress: onGoogleButtonPress,
+      },
+    ]: []),
     // {
     //   icon: 'indianFlag',
     //   title: 'Mobile Number',
