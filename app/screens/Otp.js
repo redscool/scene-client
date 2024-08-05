@@ -11,6 +11,7 @@ import Timer from '../components/Timer';
 import {showToast} from '../components/widgets/toast';
 import useService from '../context/ServiceContext';
 import useAuth from '../context/AuthContext';
+import SafeKeyboardView from '../components/SafeKeyboardView';
 
 const OtpResetPassword = ({navigation, route}) => {
   const {request} = useService();
@@ -81,7 +82,7 @@ const OtpResetPassword = ({navigation, route}) => {
     setOtpLoading(false);
   };
   return (
-    <View style={styles.container}>
+    <SafeKeyboardView style={styles.container}>
       <Text style={styles.text}>
         Please enter OTP sent to email id: e@mail.com
       </Text>
@@ -104,7 +105,7 @@ const OtpResetPassword = ({navigation, route}) => {
         style={styles.button}
         title="Continue"
       />
-    </View>
+    </SafeKeyboardView>
   );
 };
 
