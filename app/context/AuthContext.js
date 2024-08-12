@@ -125,6 +125,7 @@ export const AuthProvider = ({children}) => {
   };
 
   const initTickets = async () => {
+    if (!accessToken) return;
     try {
       const res = await requestWithAccessToken(
         'get',
