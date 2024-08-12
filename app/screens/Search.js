@@ -10,6 +10,8 @@ import Filters from '../components/Filters';
 import useService from '../context/ServiceContext';
 import Loader from '../components/Loader';
 import useAppConfig from '../context/AppConfigContext';
+import NormalText from '../components/NormalText';
+import fonts from '../config/fonts';
 
 const Search = ({navigation}) => {
   const {navigate} = navigation;
@@ -84,7 +86,7 @@ const Search = ({navigation}) => {
       </View>
       {loading ? (
         <Loader style={styles.loader} />
-      ) : (
+      ) : searchResults && searchResults.length ? (
         <FlatList
           data={searchResults}
           nestedScrollEnabled
@@ -102,6 +104,12 @@ const Search = ({navigation}) => {
           scrollEnabled={false}
           style={{marginBottom: 60}}
         />
+      ) : (
+        <NormalText
+          text={'No results found'}
+          style={{marginTop: 100, alignSelf: 'center'}}
+          fontStyle={{fontSize: 16}}
+        />
       )}
     </ScrollView>
   );
@@ -112,7 +120,6 @@ export default Search;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.dark,
-    height: 1000,
     width: '100%',
   },
   eventsContainer: {

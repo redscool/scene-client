@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import AppButton from '../components/AppButton';
 import colors from '../config/colors';
@@ -21,6 +21,7 @@ const OtpResetPassword = ({navigation, route}) => {
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState();
   const [otpLoading, setOtpLoading] = useState();
+  const [timer, setTimer] = useState(120);
 
   const handleContinue = async () => {
     setLoading(true);
@@ -71,6 +72,7 @@ const OtpResetPassword = ({navigation, route}) => {
 
   const handleResendOtp = async () => {
     setOtpLoading(true);
+
     try {
       await request('post', '/api/auth/user/login', {email});
       showToast('Otp sent successfully.');
@@ -78,8 +80,19 @@ const OtpResetPassword = ({navigation, route}) => {
       // TODO: error handling
       showToast('Something went wrong.');
     }
+    setTimer(120);
     setOtpLoading(false);
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (timer > 0) setTimer(timer - 1);
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [timer]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
@@ -88,9 +101,14 @@ const OtpResetPassword = ({navigation, route}) => {
       <View style={styles.inputContainer}>
         <OTPInput code={otp} length={4} setCode={setOtp} />
       </View>
-      <Timer style={styles.timer} time={'00:29'} />
+      <Timer
+        style={styles.timer}
+        time={`0${Math.floor(timer / 60)}:${timer % 60 < 10 ? '0' : ''}${
+          timer % 60
+        }`}
+      />
       <TextButton
-        active={!otpLoading}
+        active={!otpLoading && timer === 0}
         fontStyle={styles.resendText}
         style={styles.resend}
         title="Resend OTP"
