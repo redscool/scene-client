@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   label: {
-    color: colors.white,
+    color: colors.text,
     fontFamily: fonts[600],
     fontSize: 12,
     marginLeft: 10,

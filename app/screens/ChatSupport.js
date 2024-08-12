@@ -1,16 +1,17 @@
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import fonts from '../config/fonts';
 import Message from '../components/Message';
 import Input from '../components/Input';
 import Icon from '../Icons';
 import colors from '../config/colors';
-import {showToast} from '../components/widgets/toast';
+import { showToast } from '../components/widgets/toast';
 import useService from '../context/ServiceContext';
 import useChat from '../context/ChatContext';
+import SafeKeyboardView from '../components/SafeKeyboardView';
 
 const ChatSupport = () => {
-  const {requestWithAccessToken} = useService();
+  const { requestWithAccessToken } = useService();
 
   const {
     supportMessages: messages,
@@ -43,9 +44,8 @@ const ChatSupport = () => {
   useEffect(() => {
     getMessages();
   }, []);
-  console.log(messages);
   return (
-    <View style={styles.container}>
+    <SafeKeyboardView style={styles.container}>
       {messages.length == 0 ? (
         <Text style={styles.title}>
           Please raise your concerns and queries here.
@@ -54,8 +54,8 @@ const ChatSupport = () => {
         <FlatList
           data={messages}
           inverted
-          contentContainerStyle={{flexDirection: 'column-reverse'}}
-          renderItem={({item}) => <Message messageObj={item} />}
+          contentContainerStyle={{ flexDirection: 'column-reverse' }}
+          renderItem={({ item }) => <Message messageObj={item} />}
         />
       )}
       <View style={styles.bottomContainer}>
@@ -68,7 +68,7 @@ const ChatSupport = () => {
           <Icon name={'send'} color={colors.primary} size={20} />
         </Pressable>
       </View>
-    </View>
+    </SafeKeyboardView>
   );
 };
 

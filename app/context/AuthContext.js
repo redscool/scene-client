@@ -139,7 +139,6 @@ export const AuthProvider = ({children}) => {
     } catch (e) {
       // TODO: error handling
       console.log(e);
-      showToast('Something went wrong.');
     }
   };
 
